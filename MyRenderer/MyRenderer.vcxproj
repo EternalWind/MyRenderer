@@ -65,15 +65,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ColorRGB.h" />
+    <ClInclude Include="ColorXYZ.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix44.h" />
+    <ClInclude Include="SpectralData.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ColorRGB.cpp" />
+    <ClCompile Include="ColorXYZ.cpp" />
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix44.cpp" />
+    <ClCompile Include="SpectralData.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
