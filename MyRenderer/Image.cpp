@@ -9,10 +9,7 @@ Image::Image(unsigned width, unsigned height)
 	  m_Height(height),
 	  m_Data(nullptr)
 {
-	unsigned buffer_size = m_Width * m_Height * sizeof(ColorRGBA);
-	ColorRGBA* buffer = (ColorRGBA*)malloc(buffer_size);
-
-	memset(buffer, 0, buffer_size);
+	ColorRGBA* buffer = new ColorRGBA[m_Width * m_Height];
 	m_Data.reset(buffer);
 }
 
@@ -20,10 +17,9 @@ Image::Image(const Image& other)
 	: m_Width(other.m_Width),
 	  m_Height(other.m_Height)
 {
-	unsigned buffer_size = m_Width * m_Height * sizeof(ColorRGBA);
-	ColorRGBA* buffer = (ColorRGBA*)malloc(buffer_size);
+	ColorRGBA* buffer = new ColorRGBA[m_Width * m_Height];
 	
-	memcpy(buffer, other.m_Data.get(), buffer_size);
+	memcpy(buffer, other.m_Data.get(), m_Width * m_Height * sizeof(ColorRGBA));
 	m_Data.reset(buffer);
 }
 
@@ -35,15 +31,12 @@ Image::Image(string path)
 	if (!file.good() || !file.is_open())
 		throw Exception(string("Failed to open the given file: ") + path + string("."));
 
-	char img_type[2];
-	unsigned width = 0;
-	unsigned height = 0;
+	char img_type[3];
+	unsigned width;
+	unsigned height;
 	char max_val[10];
 
-	file.getline(img_type, 10);
-	file.getline((char*)&width, 10, ' ');
-	file.getline((char*)&height, 10);
-	file.getline(max_val, 10);
+	file >> img_type >> width >> height >> max_val;
 
 	if (strcmp(img_type, "P6") != 0)
 	{
@@ -54,7 +47,7 @@ Image::Image(string path)
 		throw Exception("The max value in the given image is not 255.");
 	}
 
-	ColorRGBA* buffer = (ColorRGBA*)malloc(width * height * sizeof(ColorRGBA));
+	ColorRGBA* buffer = new ColorRGBA[width * height];
 
 	for (unsigned j = 0; j < height; ++j) {
         for (unsigned i = 0; i < width; ++i) {
@@ -79,10 +72,9 @@ Image::Image(string path)
 
 Image Image::operator = (const Image& other)
 {
-	unsigned buffer_size = other.m_Width * other.m_Height * sizeof(ColorRGBA);
-	ColorRGBA* buffer = (ColorRGBA*)malloc(buffer_size);
+	ColorRGBA* buffer = new ColorRGBA[other.m_Width * other.m_Height];
 	
-	memcpy(buffer, other.m_Data.get(), buffer_size);
+	memcpy(buffer, other.m_Data.get(), other.m_Width * other.m_Height * sizeof(ColorRGBA));
 	this->m_Width = other.m_Width;
 	this->m_Height = other.m_Height;
 	this->m_Data.reset(buffer);

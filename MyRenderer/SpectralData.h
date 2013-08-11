@@ -23,7 +23,7 @@ public:
 	~SpectralData(void);
 
 private:
-	shared_ptr<float> m_Data;
+	unique_ptr<float[]> m_Data;
 	unsigned m_StartWaveLength;
 	unsigned m_EndWaveLength;
 	unsigned m_SampleInterval;

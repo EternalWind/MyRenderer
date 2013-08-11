@@ -33,7 +33,7 @@ public:
 private:
 	unsigned m_Width;
 	unsigned m_Height;
-	shared_ptr<ColorRGBA> m_Data;
+	unique_ptr<ColorRGBA[]> m_Data;
 };
 
 // Implementation for inline methods.
