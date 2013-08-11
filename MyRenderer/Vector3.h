@@ -16,17 +16,17 @@ public:
 
 	Vector3(const SphericalCoord& spherical_coordinates);
 
-	float inline X() const;
+	float X() const;
 
-	float inline Y() const;
+	float Y() const;
 
-	float inline Z() const;
+	float Z() const;
 
-	void inline SetX(float x);
+	void SetX(float x);
 
-	void inline SetY(float y);
+	void SetY(float y);
 
-	void inline SetZ(float z);
+	void SetZ(float z);
 
 	Vector3 CrossProduct(const Vector3& other) const;
 
@@ -34,3 +34,35 @@ public:
 
 	~Vector3(void);
 };
+
+// Implementation for inline methods.
+
+inline float Vector3::X() const
+{
+	return m_Elements[0];
+}
+
+inline float Vector3::Y() const
+{
+	return m_Elements[1];
+}
+
+inline float Vector3::Z() const
+{
+	return m_Elements[2];
+}
+
+inline void Vector3::SetX(float x)
+{
+	m_Elements[0] = x;
+}
+
+inline void Vector3::SetY(float y)
+{
+	m_Elements[1] = y;
+}
+
+inline void Vector3::SetZ(float z)
+{
+	m_Elements[2] = z;
+}

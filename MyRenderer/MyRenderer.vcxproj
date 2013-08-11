@@ -57,6 +57,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -65,9 +66,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ColorRGB.h" />
+    <ClInclude Include="ColorRGBA.h" />
     <ClInclude Include="ColorXYZ.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="Image.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="SpectralData.h" />
@@ -75,9 +77,10 @@
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ColorRGB.cpp" />
+    <ClCompile Include="ColorRGBA.cpp" />
     <ClCompile Include="ColorXYZ.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Image.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Matrix44.cpp" />
