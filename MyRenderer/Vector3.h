@@ -16,6 +16,8 @@ public:
 
 	Vector3(const SphericalCoord& spherical_coordinates);
 
+	Vector3(const Vector<3>& other);
+
 	float X() const;
 
 	float Y() const;

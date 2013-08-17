@@ -2,9 +2,10 @@
 
 #include <memory>
 
+#include "IRenderTarget.h"
 #include "ColorRGBA.h"
 
-class Image
+class Image : public IRenderTarget
 {
 public:
 	Image(unsigned width, unsigned height);

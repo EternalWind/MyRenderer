@@ -66,10 +66,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="ColorRGBA.h" />
     <ClInclude Include="ColorXYZ.h" />
     <ClInclude Include="Exception.h" />
     <ClInclude Include="Image.h" />
+    <ClInclude Include="IRenderTarget.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Matrix44.h" />
     <ClInclude Include="SpectralData.h" />
@@ -77,6 +79,7 @@
     <ClInclude Include="Vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ColorRGBA.cpp" />
     <ClCompile Include="ColorXYZ.cpp" />
     <ClCompile Include="Exception.cpp" />

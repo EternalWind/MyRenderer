@@ -25,6 +25,12 @@
     <Filter Include="Source Files\Exceptions">
       <UniqueIdentifier>{bc0fdcc6-6182-46f9-8376-fa52727a4f30}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Rendering">
+      <UniqueIdentifier>{520e1c15-4f03-48cc-8dfa-06731784c8bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Rendering">
+      <UniqueIdentifier>{64d73b3d-89ff-4f7d-8228-93555554656b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.h">
@@ -42,17 +48,23 @@
     <ClInclude Include="Math.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
-    <ClInclude Include="ColorXYZ.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SpectralData.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ColorRGBA.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorXYZ.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
     <ClInclude Include="Image.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SpectralData.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="IRenderTarget.h">
+      <Filter>Header Files\Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -71,17 +83,20 @@
     <ClCompile Include="Math.cpp">
       <Filter>Source Files\Math</Filter>
     </ClCompile>
-    <ClCompile Include="ColorXYZ.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SpectralData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ColorRGBA.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorXYZ.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
     <ClCompile Include="Image.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectralData.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
