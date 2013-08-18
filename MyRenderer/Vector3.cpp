@@ -16,11 +16,9 @@ Vector3::Vector3(const SphericalCoord& spherical_coordinates)
 	SetZ(sin(spherical_coordinates.Phi) * sin(spherical_coordinates.Theta) * spherical_coordinates.Length);
 }
 
-Vector3::Vector3(const Vector<3>& other)
+Vector3::Vector3(const Vector<3>& other) :
+	Vector<3>(other)
 {
-	SetX(other.ElementAt(0));
-	SetY(other.ElementAt(1));
-	SetZ(other.ElementAt(2));
 }
 
 Vector3 Vector3::CrossProduct(const Vector3& other) const

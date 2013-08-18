@@ -28,4 +28,3 @@ public:
 private:
 	float m_Coefficients[4][4];
 };
-
