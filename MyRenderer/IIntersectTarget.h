@@ -5,5 +5,5 @@
 class IIntersectTarget
 {
 public:
-	virtual bool Intersect(const Ray& ray) const = 0;
+	virtual bool Intersect(Ray& ray) const = 0;
 };

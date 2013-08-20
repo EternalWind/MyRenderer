@@ -3,11 +3,12 @@
 #include <math.h>
 
 #include "Vector3.h"
+#include "Math.h"
 
 class Ray
 {
 public:
-	Ray(const Vector3& origin, const Vector3& direction, float max_length = std::numeric_limits<float>::max(), float min_length = 0.f);
+	Ray(const Vector3& origin, const Vector3& direction, const Range<float>& effect_range = Range<float>(0.f, std::numeric_limits<float>::max()));
 
 	Vector3 Origin() const;
 
@@ -15,9 +16,9 @@ public:
 
 	Vector3 InvDirection() const;
 
-	float MaxLength() const;
+	Range<float> EffectRange() const;
 
-	float MinLength() const;
+	void SetEffectRange(const Range<float>& effect_range);
 
 	~Ray(void);
 
@@ -25,8 +26,7 @@ private:
 	Vector3 m_Origin;
 	Vector3 m_Direction;
 	Vector3 m_InvDirection;
-	float m_MaxLength;
-	float m_MinLength;
+	Range<float> m_EffectRange;
 };
 
 inline Vector3 Ray::Origin() const
@@ -44,12 +44,12 @@ inline Vector3 Ray::InvDirection() const
 	return m_InvDirection;
 }
 
-inline float Ray::MaxLength() const
+inline Range<float> Ray::EffectRange() const
 {
-	return m_MaxLength;
+	return m_EffectRange;
 }
 
-inline float Ray::MinLength() const
+inline void Ray::SetEffectRange(const Range<float>& effect_range)
 {
-	return m_MinLength;
+	m_EffectRange = effect_range;
 }

@@ -12,7 +12,7 @@ public:
 
 	Vector3 MaxExtent() const;
 
-	bool Intersect(const Ray& ray) const;
+	bool Intersect(Ray& ray) const;
 
 	~AABB(void);
 
