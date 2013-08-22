@@ -11,7 +11,7 @@ AABB::~AABB(void)
 {
 }
 
-bool AABB::Intersect(Ray& ray) const
+bool AABB::Intersect(Ray& ray, vector<Intersection>& intersections) const
 {
 	Vector3 origin = ray.Origin();
 	Vector3 inversed_dir = ray.InvDirection();
@@ -68,20 +68,28 @@ bool AABB::Intersect(Ray& ray) const
 		t.Max = t_z.Max;
 
 	Range<float> range = ray.EffectRange();
+	bool flag = false;
 
-	if (Math::Overlap(t, range))
+	if (Math::Contain(t.Min, range))
 	{
-		if (t.Min > range.Min)
-			range.Max = t.Min;
-		else
-			range.Max = t.Max;
+		range.Max = t.Min;
+		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Min, this));
+		flag = true;
+	}
 
+	if (Math::Contain(t.Max, range))
+	{
+		if (!flag)
+		{
+			range.Max = t.Max;
+			flag = true;
+		}
+
+		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Max, this));
+	}
+
+	if (flag)
 		ray.SetEffectRange(range);
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return flag;
 }

@@ -9,7 +9,7 @@ Sphere::Sphere(const Vector3& center, float radius) :
 {
 }
 
-bool Sphere::Intersect(Ray& ray) const
+bool Sphere::Intersect(Ray& ray, vector<Intersection>& intersections) const
 {
 	Range<float> t;
 
@@ -45,22 +45,30 @@ bool Sphere::Intersect(Ray& ray) const
 #endif
 
 	Range<float> range = ray.EffectRange();
+	bool flag = false;
 
-	if (Math::Overlap(t, range))
+	if (Math::Contain(t.Min, range))
 	{
-		if (t.Min > range.Min)
-			range.Max = t.Min;
-		else
-			range.Max = t.Max;
+		range.Max = t.Min;
+		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Min, this));
+		flag = true;
+	}
 
+	if (Math::Contain(t.Max, range))
+	{
+		if (!flag)
+		{
+			range.Max = t.Max;
+			flag = true;
+		}
+
+		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Max, this));
+	}
+
+	if (flag)
 		ray.SetEffectRange(range);
 
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	return flag;
 }
 
 Sphere::~Sphere(void)

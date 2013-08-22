@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Exception.h"
 
 template <class T>
@@ -32,6 +33,9 @@ public:
 
 	template <class T>
 	static bool Overlap(const Range<T>& range1, const Range<T>& range2);
+
+	template <class T>
+	static bool Contain(const T& value, const Range<T>& range);
 
 private:
 	Math(void);
@@ -96,4 +100,10 @@ template <class T>
 inline bool Math::Overlap(const Range<T>& range1, const Range<T>& range2)
 {
 	return !(range1.Min > range2.Max || range1.Max < range2.Min);
+}
+
+template <class T>
+inline bool Math::Contain(const T& value, const Range<T>& range)
+{
+	return value <= range.Max && value >= range.Min;
 }

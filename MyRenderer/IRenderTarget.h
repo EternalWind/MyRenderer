@@ -12,4 +12,6 @@ public:
 	virtual unsigned Width() const = 0;
 	
 	virtual unsigned Height() const = 0;
+
+	virtual ~IRenderTarget() = 0 {}
 };

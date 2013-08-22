@@ -8,7 +8,7 @@ class Sphere : public IIntersectTarget
 public:
 	Sphere(const Vector3& center, float radius);
 
-	bool Intersect(Ray& ray) const; 
+	bool Intersect(Ray& ray, vector<Intersection>& intersections) const; 
 
 	~Sphere(void);
 
@@ -16,4 +16,3 @@ private:
 	Vector3 m_Center;
 	float m_Radius;
 };
-

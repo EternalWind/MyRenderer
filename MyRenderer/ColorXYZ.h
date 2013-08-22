@@ -1,4 +1,5 @@
 #pragma once
+
 #include "vector.h"
 #include "SpectralData.h"
 
@@ -24,4 +25,3 @@ public:
 
 	~ColorXYZ(void);
 };
-
