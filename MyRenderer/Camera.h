@@ -34,6 +34,14 @@ public:
 
 	void Render();
 
+	float NearClippingPlane() const;
+
+	float FarClippingPlane() const;
+
+	void SetNearClippingPlane(float near_clipping_plane);
+
+	void SetFarClippingPlane(float far_clipping_plane);
+
 	~Camera(void);
 
 protected:
@@ -41,8 +49,11 @@ protected:
 	Vector3 m_Orientation;
 	Vector3 m_Up;
 	Matrix44 m_C2WTransformation;
+	Matrix44 m_W2CTransformation;
 	shared_ptr<IRenderTarget> m_RenderTarget;
 	float m_FOV;                                      //!< The vertical field of view angle.
+	float m_NearClippingPlane;
+	float m_FarClippingPlane;
 };
 
 
@@ -81,4 +92,24 @@ inline void Camera::SetRenderTarget(shared_ptr<IRenderTarget> target)
 inline void Camera::SetFOV(float fov)
 {
 	m_FOV = fov;
+}
+
+inline float Camera::NearClippingPlane() const
+{
+	return m_NearClippingPlane;
+}
+
+inline float Camera::FarClippingPlane() const
+{
+	return m_FarClippingPlane;
+}
+
+inline void Camera::SetNearClippingPlane(float near_clipping_plane)
+{
+	m_NearClippingPlane = near_clipping_plane;
+}
+
+inline void Camera::SetFarClippingPlane(float far_clipping_plane)
+{
+	m_FarClippingPlane = far_clipping_plane;
 }
