@@ -1,7 +1,8 @@
 #include "AABB.h"
 
 
-AABB::AABB(const Vector3& min_extent, const Vector3& max_extent) :
+AABB::AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA& color) :
+	Shape(color),
 	m_MinExtent(min_extent),
 	m_MaxExtent(max_extent)
 {
@@ -11,7 +12,7 @@ AABB::~AABB(void)
 {
 }
 
-bool AABB::Intersect(Ray& ray, vector<Intersection>& intersections) const
+shared_ptr<Intersection> AABB::Intersect(const Ray& ray) const
 {
 	Vector3 origin = ray.Origin();
 	Vector3 inversed_dir = ray.InvDirection();
@@ -41,7 +42,7 @@ bool AABB::Intersect(Ray& ray, vector<Intersection>& intersections) const
 	}
 
 	if (t.Min > t_y.Max || t_y.Min > t.Max)
-		return false;
+		return nullptr;
 
 	if (t.Min < t_y.Min)
 		t.Min = t_y.Min;
@@ -60,7 +61,7 @@ bool AABB::Intersect(Ray& ray, vector<Intersection>& intersections) const
 	}
 
 	if (t.Min > t_z.Max || t_z.Min > t.Max)
-		return false;
+		return nullptr;
 
 	if (t.Min < t_z.Min)
 		t.Min = t_z.Min;
@@ -68,28 +69,17 @@ bool AABB::Intersect(Ray& ray, vector<Intersection>& intersections) const
 		t.Max = t_z.Max;
 
 	Range<float> range = ray.EffectRange();
-	bool flag = false;
 
 	if (Math::Contain(t.Min, range))
 	{
-		range.Max = t.Min;
-		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Min, this));
-		flag = true;
+		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Min, this, t.Min));
 	}
-
-	if (Math::Contain(t.Max, range))
+	else if (Math::Contain(t.Max, range))
 	{
-		if (!flag)
-		{
-			range.Max = t.Max;
-			flag = true;
-		}
-
-		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Max, this));
+		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Max, this, t.Max));
 	}
-
-	if (flag)
-		ray.SetEffectRange(range);
-
-	return flag;
+	else
+	{
+		return nullptr;
+	}
 }

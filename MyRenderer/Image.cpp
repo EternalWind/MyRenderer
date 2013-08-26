@@ -55,7 +55,7 @@ Image::Image(string path)
             unsigned char g = 0;
             unsigned char b = 0;
 
-            file >> r >> g >> b;
+            file >> g >> b >> r;
 			buffer[j * width + i].SetRed(r / 255.f);
 			buffer[j * width + i].SetGreen(g / 255.f);
 			buffer[j * width + i].SetBlue(b / 255.f);
@@ -113,7 +113,7 @@ void Image::SaveAsPPM(string path, bool gamma_encoding, float gamma) const
 				b = (unsigned char)(Math::Clamp(pixel[j * m_Width + i].Blue(), 1.f, 0.f) * 255 + 0.5);
 			}
 
-            file << r << g << b;
+            file << g << b << r;
         }
     }
 

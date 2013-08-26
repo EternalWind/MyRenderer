@@ -42,6 +42,10 @@ public:
 
 	void SetFarClippingPlane(float far_clipping_plane);
 
+	const Matrix44& CameraToWorld() const;
+
+	const Matrix44& WorldToCamera() const;
+
 	~Camera(void);
 
 protected:
@@ -112,4 +116,14 @@ inline void Camera::SetNearClippingPlane(float near_clipping_plane)
 inline void Camera::SetFarClippingPlane(float far_clipping_plane)
 {
 	m_FarClippingPlane = far_clipping_plane;
+}
+
+inline const Matrix44& Camera::CameraToWorld() const
+{
+	return m_C2WTransformation;
+}
+
+inline const Matrix44& Camera::WorldToCamera() const
+{
+	return m_W2CTransformation;
 }

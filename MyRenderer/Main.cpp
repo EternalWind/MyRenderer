@@ -15,20 +15,27 @@
 #include "Ray.h"
 #include "Sphere.h"
 #include "Disk.h"
+#include "RayTracer.h"
+#include "Scene.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	Ray r(Vector3(0.f, 0.f, 1.f), Vector3(0.f, .0f, -1.f));
-	AABB box(Vector3(-1.f, -1.f, -1.f), Vector3(1.f, 1.f, 1.f));
-	Sphere sphere(Vector3(1.f), 1.f);
-	Disk disk(1.f);
-	vector<Intersection> intersections;
+	shared_ptr<Renderer> renderer(new RayTracer());
+	shared_ptr<Image> image(new Image(640, 480));
+	shared_ptr<Scene> scene = renderer->AddScene(shared_ptr<Scene>(new Scene(ColorRGBA(0.f, 0.f, 0.f))));
+	shared_ptr<IIntersectTarget> sphere1 = scene->AddGeometry(shared_ptr<IIntersectTarget>(new Sphere(Vector3(), 1.f, ColorRGBA(1.f, 0.f, 0.f))));	
+	shared_ptr<IIntersectTarget> sphere2 = scene->AddGeometry(shared_ptr<IIntersectTarget>(new Sphere(Vector3(.5f, .5f, -2.5f), 2.f, ColorRGBA(0.f, 1.f, 0.f))));	
+	//scene->AddGeometry(shared_ptr<IIntersectTarget>(new Disk(1.f, Vector3(), Vector3(0.f, 0.f, 1.f), ColorRGBA(1.f, 0.f, 0.f))));
+	//scene->AddGeometry(shared_ptr<IIntersectTarget>(new Disk(1.f, Vector3(0.f, 1.f, -.5f), Vector3(0.f, 0.f, 1.f), ColorRGBA(0.f, 1.f, 0.f))));
+	shared_ptr<Camera> cam = scene->AddCamera(shared_ptr<Camera>(new Camera(image, Vector3(0.f, 0.f, 2.f))));
+	cam->SetNearClippingPlane(.1f);
+	cam->SetFarClippingPlane(10.f);
 
-	bool result = disk.Intersect(r, intersections);
+	renderer->Render();
 
-	cout << (result ? "Hit" : "Missed") << endl;
+	image->SaveAsPPM("FirstBlood.ppm");
 
 	system("pause");
 

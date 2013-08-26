@@ -1,33 +1,30 @@
 #include "Plane.h"
 
 
-Plane::Plane(const Vector3& center, const Vector3& orientation) :
+Plane::Plane(const Vector3& center, const Vector3& orientation, const ColorRGBA& color) :
+	Shape(color),
 	m_Center(center),
 	m_Orientation(orientation)
 {
 	m_Orientation.Normalise();
 }
 
-bool Plane::Intersect(Ray& ray, vector<Intersection>& intersections) const
+shared_ptr<Intersection> Plane::Intersect(const Ray& ray) const
 {
 	float dir_norm = ray.Direction().DotProduct(m_Orientation);
 
 	if (abs(dir_norm) < std::numeric_limits<float>::epsilon())
-		return false;
+		return nullptr;
 
 	float t = (m_Center - ray.Origin()).DotProduct(m_Orientation) / dir_norm;
 
 	Range<float> range = ray.EffectRange();
 	if (Math::Contain(t, range))
 	{
-		range.Max = t;
-		ray.SetEffectRange(range);
-		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t, this));
-
-		return true;
+		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t, this, t));
 	}
 
-	return false;
+	return nullptr;
 }
 
 Plane::~Plane(void)

@@ -1,19 +1,19 @@
 #pragma once
 
-#include "IIntersectTarget.h"
+#include "Shape.h"
 #include "Vector3.h"
 
 class Plane :
-	public IIntersectTarget
+	public Shape
 {
 public:
-	Plane(const Vector3& center = Vector3(), const Vector3& orientation = Vector3(0.f, 0.f, 1.f));
+	Plane(const Vector3& center = Vector3(), const Vector3& orientation = Vector3(0.f, 0.f, 1.f), const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
 	Vector3 Center() const;
 
 	Vector3 Orientation() const;
 
-	virtual bool Intersect(Ray& ray, vector<Intersection>& intersections) const;
+	virtual shared_ptr<Intersection> Intersect(const Ray& ray) const;
 
 	virtual ~Plane(void);
 

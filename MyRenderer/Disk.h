@@ -6,11 +6,11 @@ class Disk :
 	public Plane
 {
 public:
-	Disk(float radius, const Vector3& center = Vector3(), const Vector3& orientation = Vector3(0.f, 0.f, 1.f));
+	Disk(float radius, const Vector3& center = Vector3(), const Vector3& orientation = Vector3(0.f, 0.f, 1.f), const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
 	float Radius() const;
 
-	bool Intersect(Ray& ray, vector<Intersection>& intersections) const;
+	shared_ptr<Intersection> Intersect(const Ray& ray) const;
 
 	~Disk(void);
 

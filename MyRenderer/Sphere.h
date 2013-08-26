@@ -1,14 +1,14 @@
 #pragma once
 
-#include "IIntersectTarget.h"
+#include "Shape.h"
 #include "Vector3.h"
 
-class Sphere : public IIntersectTarget
+class Sphere : public Shape
 {
 public:
-	Sphere(const Vector3& center, float radius);
+	Sphere(const Vector3& center, float radius, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
-	bool Intersect(Ray& ray, vector<Intersection>& intersections) const; 
+	shared_ptr<Intersection> Intersect(const Ray& ray) const; 
 
 	~Sphere(void);
 

@@ -3,13 +3,14 @@
 
 //#define USE_GEOMETRIC
 
-Sphere::Sphere(const Vector3& center, float radius) :
+Sphere::Sphere(const Vector3& center, float radius, const ColorRGBA& color) :
+	Shape(color),
 	m_Center(center),
 	m_Radius(radius)
 {
 }
 
-bool Sphere::Intersect(Ray& ray, vector<Intersection>& intersections) const
+shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
 {
 	Range<float> t;
 
@@ -21,7 +22,7 @@ bool Sphere::Intersect(Ray& ray, vector<Intersection>& intersections) const
 
 	if (d_sq > r_sq)
 	{
-		return false;
+		return nullptr;
 	}
 	else if (d_sq == r_sq)
 	{
@@ -41,34 +42,22 @@ bool Sphere::Intersect(Ray& ray, vector<Intersection>& intersections) const
 	float c = translated_origin.SquareLength() - m_Radius * m_Radius;
 
 	if (!Math::SolveQuadratic(a, b, c, t.Min, t.Max))
-		return false;
+		return nullptr;
 #endif
 
 	Range<float> range = ray.EffectRange();
-	bool flag = false;
 
 	if (Math::Contain(t.Min, range))
 	{
-		range.Max = t.Min;
-		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Min, this));
-		flag = true;
+		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Min, this, t.Min));
 	}
 
 	if (Math::Contain(t.Max, range))
 	{
-		if (!flag)
-		{
-			range.Max = t.Max;
-			flag = true;
-		}
-
-		intersections.push_back(Intersection(ray.Origin() + ray.Direction() * t.Max, this));
+		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Max, this, t.Max));
 	}
 
-	if (flag)
-		ray.SetEffectRange(range);
-
-	return flag;
+	return nullptr;
 }
 
 Sphere::~Sphere(void)

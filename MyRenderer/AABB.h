@@ -1,18 +1,18 @@
 #pragma once
 
 #include "Vector3.h"
-#include "IIntersectTarget.h"
+#include "Shape.h"
 
-class AABB : public IIntersectTarget
+class AABB : public Shape
 {
 public:
-	AABB(const Vector3& min_extent, const Vector3& max_extent);
+	AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
 	Vector3 MinExtent() const;
 
 	Vector3 MaxExtent() const;
 
-	bool Intersect(Ray& ray, vector<Intersection>& intersections) const;
+	shared_ptr<Intersection> Intersect(const Ray& ray) const;
 
 	~AABB(void);
 
