@@ -41,6 +41,8 @@ public:
 
 	float DotProduct(const Vector<size>& other) const;
 
+	bool IsZeroLength() const;
+
 protected:
 	float m_Elements[size];
 };
@@ -178,4 +180,16 @@ float Vector<size>::DotProduct(const Vector<size>& other) const
 	}
 
 	return result;
+}
+
+template <size_t size>
+bool Vector<size>::IsZeroLength() const
+{
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (m_Elements[i] != 0.f)
+			return false;
+	}
+
+	return true;
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IIntersectTarget.h"
+#include "Matrix44.h"
 
 class Shape : public IIntersectTarget
 {
@@ -15,6 +16,8 @@ public:
 
 protected:
 	ColorRGBA m_Color;
+	Matrix44 m_W2OTransformation;
+	Matrix44 m_O2WTransformation;
 };
 
 inline ColorRGBA Shape::Color() const
