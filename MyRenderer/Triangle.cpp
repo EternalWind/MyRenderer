@@ -1,11 +1,12 @@
 #include "Triangle.h"
 
 
-Triangle::Triangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const ColorRGBA& color) :
+Triangle::Triangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const ColorRGBA& color, bool is_double_sided) :
 	Shape(color),
 	m_V0(v0),
 	m_V1(v1),
-	m_V2(v2)
+	m_V2(v2),
+	m_IsDoubleSided(is_double_sided)
 {
 	Vector3 a = v1 - v0;
 	Vector3 b = v2 - v0;
@@ -21,6 +22,9 @@ shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 	float dir_norm = m_Normal.DotProduct(ray.Direction());
 
 	if (abs(dir_norm) < numeric_limits<float>::epsilon())
+		return nullptr;
+
+	if (dir_norm > 0.f && !m_IsDoubleSided)
 		return nullptr;
 
 	float orig_norm = m_Normal.DotProduct(ray.Origin());
