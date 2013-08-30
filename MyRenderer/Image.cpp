@@ -85,12 +85,14 @@ Image Image::operator = (const Image& other)
 void Image::SaveAsPPM(string path, bool gamma_encoding, float gamma) const
 {
 	std::ofstream file;
-	file.open(path);
+	file.open(path, ios::binary | ios::out);
 
 	if (!file.is_open())
 		throw Exception(string("Failed to save to file: ") + path + string("."));
 
 	ColorRGBA* pixel = m_Data.get();
+
+	unsigned char* buffer = new unsigned char[m_Width * m_Height * 3];
 
 	file << "P6\n" << this->m_Width << " " << this->m_Height << "\n255\n";
 
@@ -113,9 +115,29 @@ void Image::SaveAsPPM(string path, bool gamma_encoding, float gamma) const
 				b = (unsigned char)(Math::Clamp(pixel[j * m_Width + i].Blue(), 1.f, 0.f) * 255 + 0.5);
 			}
 
-            file << g << b << r;
+			/*if (j > 200 && j < 381)
+			{
+				if (i > 200 && i < 300)
+				{
+					float wtf = 19.f;
+					float c1 = wtf / 180.f;
+
+					r = 26;
+					g = 128;
+					b = 0;
+				}
+			}*/
+
+			buffer[(j * m_Width + i) * 3] = g;
+			buffer[(j * m_Width + i) * 3 + 1] = b;
+			buffer[(j * m_Width + i) * 3 + 2] = r;
+            //file << g << b << r;
+
+			//pixel++;
         }
     }
+
+	file.write((char*)buffer, m_Width * m_Height * 3);
 
 	file.close();
 }

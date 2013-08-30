@@ -5,10 +5,17 @@
 
 class IIntersectTarget;
 
+struct ParycentricCoord
+{
+	float u;
+	float v;
+	float w;
+};
+
 class Intersection
 {
 public:
-	Intersection(const Vector3& position, const IIntersectTarget* object, float distance);
+	Intersection(const Vector3& position, const IIntersectTarget* object, float distance, const ParycentricCoord& uvw = ParycentricCoord());
 
 	Vector3 Position() const;
 
@@ -22,12 +29,17 @@ public:
 
 	void SetDistance(float distance);
 
+	ParycentricCoord ParycentricCoordinate() const;
+
+	void SetParycentricCoordinate(const ParycentricCoord& coord);
+
 	~Intersection(void);
 
 private:
 	Vector3 m_Position;
 	IIntersectTarget* m_IntersectObjectHandle;
 	float m_Distance;
+	ParycentricCoord m_ParycentricCoord;
 };
 
 // Implementation for inline methods.
@@ -59,4 +71,14 @@ inline void Intersection::SetIntersectObject(IIntersectTarget* object)
 inline void Intersection::SetDistance(float distance)
 {
 	m_Distance = distance;
+}
+
+inline ParycentricCoord Intersection::ParycentricCoordinate() const
+{
+	return m_ParycentricCoord;
+}
+
+inline void Intersection::SetParycentricCoordinate(const ParycentricCoord& coord)
+{
+	m_ParycentricCoord = coord;
 }

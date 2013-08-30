@@ -23,6 +23,7 @@ private:
 	Vector3 m_Normal;
 	
 	float m_D;
+	float m_NormalSqLength;
 
 	bool m_IsDoubleSided;
 };

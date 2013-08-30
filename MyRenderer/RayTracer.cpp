@@ -1,5 +1,6 @@
 #include "RayTracer.h"
 
+#include <time.h>
 
 RayTracer::RayTracer(void)
 {
@@ -85,7 +86,9 @@ ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometr
 
 ColorRGBA RayTracer::Shade(const Ray& ray, shared_ptr<Intersection> intersection) const
 {
-	return intersection->IntersectObject()->Color();
+	auto uvw = intersection->ParycentricCoordinate();
+
+	return ColorRGBA(uvw.u, uvw.v, uvw.w);
 }
 
 RayTracer::~RayTracer(void)
