@@ -15,7 +15,7 @@ shared_ptr<Intersection> Disk::Intersect(const Ray& ray) const
 
 	if (intersection.get() != nullptr)
 	{
-		Vector3 intersect_point = intersection->Position();
+		Vector3 intersect_point = ray.Origin() + ray.Direction() * intersection->Distance();
 		float distance_sq = (intersect_point - m_Center).SquareLength();
 
 		if (distance_sq <= m_SquareRadius)

@@ -21,7 +21,7 @@ shared_ptr<Intersection> Plane::Intersect(const Ray& ray) const
 	Range<float> range = ray.EffectRange();
 	if (Math::Contain(t, range))
 	{
-		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t, this, t));
+		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t));
 	}
 
 	return nullptr;

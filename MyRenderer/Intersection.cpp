@@ -1,8 +1,8 @@
 #include "Intersection.h"
 
-Intersection::Intersection(const Vector3& position, const IIntersectTarget* object, float distance, const ParycentricCoord& uvw) :
-	m_Position(position),
-	m_IntersectObjectHandle(const_cast<IIntersectTarget*>(object)),
+Intersection::Intersection(const Ray* test_object, IIntersectTarget* intersect_object, float distance, const ParycentricCoord& uvw) :
+	m_TestObjectHandle(test_object),
+	m_IntersectObjectHandle(intersect_object),
 	m_Distance(distance),
 	m_ParycentricCoord(uvw)
 {

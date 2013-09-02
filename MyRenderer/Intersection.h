@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IIntersectTarget.h"
+#include "Ray.h"
 #include "Vector3.h"
 
 class IIntersectTarget;
@@ -15,15 +16,15 @@ struct ParycentricCoord
 class Intersection
 {
 public:
-	Intersection(const Vector3& position, const IIntersectTarget* object, float distance, const ParycentricCoord& uvw = ParycentricCoord());
+	Intersection(const Ray* test_object, IIntersectTarget* intersect_object, float distance, const ParycentricCoord& uvw = ParycentricCoord());
 
-	Vector3 Position() const;
+	const Ray* TestObject() const;
 
 	IIntersectTarget* IntersectObject() const;
 
 	float Distance() const;
 
-	void SetPosition(const Vector3& position);
+	void SetTestObject(const Ray* test_object);
 
 	void SetIntersectObject(IIntersectTarget* object);
 
@@ -36,16 +37,16 @@ public:
 	~Intersection(void);
 
 private:
-	Vector3 m_Position;
+	const Ray* m_TestObjectHandle;
 	IIntersectTarget* m_IntersectObjectHandle;
 	float m_Distance;
 	ParycentricCoord m_ParycentricCoord;
 };
 
 // Implementation for inline methods.
-inline Vector3 Intersection::Position() const
+inline const Ray* Intersection::TestObject() const
 {
-	return m_Position;
+	return m_TestObjectHandle;
 }
 
 inline IIntersectTarget* Intersection::IntersectObject() const 
@@ -58,9 +59,9 @@ inline float Intersection::Distance() const
 	return m_Distance;
 }
 
-inline void Intersection::SetPosition(const Vector3& position)
+inline void Intersection::SetTestObject(const Ray* test_object)
 {
-	m_Position = position;
+	m_TestObjectHandle = test_object;
 }
 
 inline void Intersection::SetIntersectObject(IIntersectTarget* object)

@@ -49,12 +49,12 @@ shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
 
 	if (Math::Contain(t.Min, range))
 	{
-		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Min, this, t.Min));
+		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Min));
 	}
 
 	if (Math::Contain(t.Max, range))
 	{
-		return shared_ptr<Intersection>(new Intersection(ray.Origin() + ray.Direction() * t.Max, this, t.Max));
+		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Max));
 	}
 
 	return nullptr;
