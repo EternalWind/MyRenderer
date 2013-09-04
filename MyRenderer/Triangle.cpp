@@ -1,27 +1,27 @@
 #include "Triangle.h"
 
 
-Triangle::Triangle(const Vector3& v0, const Vector3& v1, const Vector3& v2, const ColorRGBA& color, bool is_double_sided) :
+Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color, bool is_double_sided) :
 	Shape(color),
 	m_V0(v0),
 	m_V1(v1),
 	m_V2(v2),
 	m_IsDoubleSided(is_double_sided)
 {
-	Vector3 a = v1 - v0;
-	Vector3 b = v2 - v0;
+	Vector3 a = *v1 - *v0;
+	Vector3 b = *v2 - *v0;
 
 	m_Normal = a.CrossProduct(b);
 	m_NormalSqLength = m_Normal.SquareLength();
 
-	m_D = -(m_Normal.DotProduct(m_V0));
+	m_D = -(m_Normal.DotProduct(*m_V0));
 }
 
 shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 {
 #ifdef MOLLER_TRUMBORE
-	Vector3 v0_v1 = m_V1 - m_V0;
-	Vector3 v0_v2 = m_V2 - m_V0;
+	Vector3 v0_v1 = *m_V1 - *m_V0;
+	Vector3 v0_v2 = *m_V2 - *m_V0;
 
 	Vector3 pvec = ray.Direction().CrossProduct(v0_v2);
 	float det = v0_v1.DotProduct(pvec);
@@ -32,7 +32,7 @@ shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 	if (!m_IsDoubleSided && det < 0.f)
 		return nullptr;
 
-	Vector3 tvec = ray.Origin() - m_V0;
+	Vector3 tvec = ray.Origin() - *m_V0;
 	Vector3 qvec = tvec.CrossProduct(v0_v1);
 
 	ParycentricCoord coord;
@@ -95,18 +95,18 @@ shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 		return nullptr;
 
 	float orig_norm = m_Normal.DotProduct(ray.Origin());
-	float t = -(orig_norm + m_D) / dir_norm;
+	float t = -(orig_norm + *m_D) / dir_norm;
 
 	if (!Math::Contain(t, ray.EffectRange()))
 		return nullptr;
 
 	Vector3 p_hit = ray.Origin() + ray.Direction() * t;
 
-	Vector3 v0_v1 = m_V1 - m_V0;
-	Vector3 v1_v2 = m_V2 - m_V1;
+	Vector3 v0_v1 = *m_V1 - *m_V0;
+	Vector3 v1_v2 = *m_V2 - *m_V1;
 
-	Vector3 v0_p = p_hit - m_V0;
-	Vector3 v1_p = p_hit - m_V1;
+	Vector3 v0_p = p_hit - *m_V0;
+	Vector3 v1_p = p_hit - *m_V1;
 
 	ParycentricCoord coord;
 

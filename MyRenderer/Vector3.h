@@ -34,7 +34,7 @@ public:
 
 	SphericalCoord GetSphericalCoordinates() const;
 
-	~Vector3(void);
+	//~Vector3(void);
 };
 
 // Implementation for inline methods.

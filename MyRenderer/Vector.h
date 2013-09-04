@@ -13,7 +13,7 @@ class Vector
 public:
 	Vector(void) {}
 
-	virtual ~Vector(void) {}
+	//virtual ~Vector(void) {}
 
 	float ElementAt(unsigned index) const;
 
