@@ -1,5 +1,6 @@
 #include "Sphere.h"
 #include "Math.h"
+#include "PolygonGenerator.h"
 
 //#define USE_GEOMETRIC
 
@@ -58,6 +59,11 @@ shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
 	}
 
 	return nullptr;
+}
+
+shared_ptr<Mesh> Sphere::ToMesh(unsigned divs) const
+{
+	return PolygonGenerator::Sphere(m_Radius, divs, m_Center);
 }
 
 Sphere::~Sphere(void)

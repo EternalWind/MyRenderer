@@ -55,7 +55,21 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 
 shared_ptr<Intersection> Mesh::Intersect(const Ray& ray) const
 {
-	return nullptr;
+	float closest_distance = ray.EffectRange().Max;
+	shared_ptr<Intersection> closest_hit = nullptr;
+
+	for (auto begin = m_Triangles.begin(); begin != m_Triangles.end(); ++begin)
+	{
+		auto hit = begin->Intersect(ray);
+
+		if (hit.get() != nullptr && hit->Distance() < closest_distance)
+		{
+			closest_distance = hit->Distance();
+			closest_hit = hit;
+		}
+	}
+
+	return closest_hit;
 }
 
 Mesh::~Mesh(void)

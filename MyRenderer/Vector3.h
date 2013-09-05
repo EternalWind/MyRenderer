@@ -4,6 +4,8 @@
 
 struct SphericalCoord
 {
+	SphericalCoord(float theta = 0.f, float phi = 0.f, float length = 1.f) : Theta(theta), Phi(phi), Length(length) {}
+
 	float Theta;
 	float Phi;
 	float Length;

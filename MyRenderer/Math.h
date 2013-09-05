@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Defs.h"
 #include "Exception.h"
 
 template <class T>
@@ -18,6 +19,8 @@ struct Range
 
 class Math
 {
+	MAKE_STATIC(Math)
+
 public:
 	template <class T>
 	static T Clamp(const T& value, const T& max, const T& min);
@@ -36,13 +39,6 @@ public:
 
 	template <class T>
 	static bool Contain(const T& value, const Range<T>& range);
-
-private:
-	Math(void);
-
-	Math(const Math& other);
-
-	Math operator = (const Math& other);
 };
 
 // Implementation for template methods.
