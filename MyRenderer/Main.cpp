@@ -6,6 +6,7 @@
 #include <vector>
 #include <random>
 #include <list>
+#include <array>
 
 #include "Matrix44.h"
 #include "Math.h"
@@ -22,28 +23,6 @@
 #include "PolygonGenerator.h"
 
 using namespace std;
-
-class Base
-{
-public:
-   //~Base() {}
-	virtual void WTF() = 0;
-
-protected:
-	Base() {}
-
-	Base(const Base& other) {}
-
-	//Base operator = (const Base& other) { return nullptr; }
-
-	//float m_Elements[size];
-};
-
-class V3 : public Base
-{
-public:
-	void WTF() {}
-};
 
 int main(int argc, char** argv)
 {
