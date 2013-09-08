@@ -78,10 +78,26 @@ ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometr
 		}
 	}
 
-	if (closest_hit.get() != nullptr)
-		return Shade(ray, closest_hit);
-	else
+	if (m_IsWireFrame)
+	{
+		if (closest_hit.get() != nullptr)
+		{
+			ParycentricCoord uvw = closest_hit->ParycentricCoordinate();
+			float epsilon = 0.01f;
+
+			if (uvw.u < epsilon || uvw.v < epsilon || uvw.w < epsilon)
+				return ColorRGBA(1.f, 1.f, 1.f);
+		}
+
 		return background_color;
+	}
+	else
+	{
+		if (closest_hit.get() != nullptr)
+			return Shade(ray, closest_hit);
+		else
+			return background_color;
+	}
 }
 
 ColorRGBA RayTracer::Shade(const Ray& ray, shared_ptr<Intersection> intersection) const

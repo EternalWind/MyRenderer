@@ -81,5 +81,11 @@ shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vec
 		}
 	}
 
-	return shared_ptr<Mesh>(new Mesh(polygon_num, vertices_per_polygon, vertices, indices));
+	auto mesh = shared_ptr<Mesh>(new Mesh(polygon_num, vertices_per_polygon, vertices, indices));
+
+	delete[] vertices;
+	delete[] indices;
+	delete[] vertices_per_polygon;
+
+	return mesh;
 }

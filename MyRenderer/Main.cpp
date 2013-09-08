@@ -21,6 +21,7 @@
 #include "Scene.h"
 #include "Triangle.h"
 #include "PolygonGenerator.h"
+#include "BezierCurve.h"
 
 using namespace std;
 
@@ -29,10 +30,12 @@ int main(int argc, char** argv)
 	shared_ptr<Renderer> renderer(new RayTracer());
 	shared_ptr<Image> image(new Image(640, 480));
 	shared_ptr<Scene> scene = renderer->AddScene(shared_ptr<Scene>(new Scene(ColorRGBA(0.f, 0.f, 0.f))));
-	scene->AddGeometry(PolygonGenerator::Sphere(1.f, 3));
+	scene->AddGeometry(PolygonGenerator::Sphere(1.f, 10));
 	shared_ptr<Camera> cam = scene->AddCamera(shared_ptr<Camera>(new Camera(image, Vector3(0.f, 0.f, 2.f))));
 	cam->SetNearClippingPlane(.1f);
 	cam->SetFarClippingPlane(10.f);
+
+	//renderer->AsWireFrame(true);
 
 	renderer->Render();
 

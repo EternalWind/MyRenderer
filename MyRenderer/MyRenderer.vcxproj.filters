@@ -120,6 +120,9 @@
     <ClInclude Include="BezierCurve.h">
       <Filter>Header Files\Math</Filter>
     </ClInclude>
+    <ClInclude Include="BezierSurface.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3.cpp">
