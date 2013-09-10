@@ -9,7 +9,7 @@ class Sphere : public Shape
 public:
 	Sphere(const Vector3& center, float radius, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
-	shared_ptr<Intersection> Intersect(const Ray& ray) const; 
+	bool Intersect(const Ray& ray, Intersection& intersection) const; 
 
 	shared_ptr<Mesh> ToMesh(unsigned divs) const;
 

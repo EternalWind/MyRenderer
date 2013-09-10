@@ -10,7 +10,7 @@ public:
 
 	float Radius() const;
 
-	shared_ptr<Intersection> Intersect(const Ray& ray) const;
+	bool Intersect(const Ray& ray, Intersection& intersection) const;
 
 	~Disk(void);
 

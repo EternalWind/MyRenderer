@@ -6,6 +6,8 @@ Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, cons
 	m_V0(v0),
 	m_V1(v1),
 	m_V2(v2),
+	m_V0V1(*m_V1 - *m_V0),
+	m_V0V2(*m_V2 - *m_V0),
 	m_IsDoubleSided(is_double_sided)
 {
 	Vector3 a = *v1 - *v0;
@@ -17,59 +19,58 @@ Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, cons
 	m_D = -(m_Normal.DotProduct(*m_V0));
 }
 
-shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
+bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 {
-#ifdef MOLLER_TRUMBORE
-	Vector3 v0_v1 = *m_V1 - *m_V0;
-	Vector3 v0_v2 = *m_V2 - *m_V0;
+	float t = 0.f;
+	ParycentricCoord coord;
 
-	Vector3 pvec = ray.Direction().CrossProduct(v0_v2);
-	float det = v0_v1.DotProduct(pvec);
+#ifdef MOLLER_TRUMBORE
+
+	Vector3 pvec = ray.Direction().CrossProduct(m_V0V2);
+	float det = m_V0V1.DotProduct(pvec);
 
 	if (abs(det) < numeric_limits<float>::epsilon())
-		return nullptr;
+		return false;
 
 	if (!m_IsDoubleSided && det < 0.f)
-		return nullptr;
+		return false;
 
 	Vector3 tvec = ray.Origin() - *m_V0;
-	Vector3 qvec = tvec.CrossProduct(v0_v1);
-
-	ParycentricCoord coord;
+	Vector3 qvec = tvec.CrossProduct(m_V0V1);
 
 	if (det > 0.f)
 	{
 		coord.u = tvec.DotProduct(pvec);
 
 		if (coord.u < 0.f || coord.u > det)
-			return nullptr;
+			return false;
 
 		coord.v = ray.Direction().DotProduct(qvec);
 
 		if (coord.v < 0.f || coord.v > det)
-			return nullptr;
+			return false;
 
 		coord.w = coord.u + coord.v;
 
 		if (coord.w > det)
-			return nullptr;
+			return false;
 	}
 	else
 	{
 		coord.u = tvec.DotProduct(pvec);
 
 		if (coord.u > 0.f || coord.u < det)
-			return nullptr;
+			return false;
 
 		coord.v = ray.Direction().DotProduct(qvec);
 
 		if (coord.v > 0.f || coord.v < det)
-			return nullptr;
+			return false;
 
 		coord.w = coord.u + coord.v;
 
 		if (coord.w < det)
-			return nullptr;
+			return false;
 	}
 
 	float det_inv = 1 / det;
@@ -78,27 +79,24 @@ shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 	coord.v *= det_inv;
 	coord.w = 1 - coord.u - coord.v;
 
-	float t = v0_v2.DotProduct(qvec);
+	t = m_V0V2.DotProduct(qvec);
 
 	if (!Math::Contain(t, ray.EffectRange()))
-		return nullptr;
-
-	return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t, coord));
-
+		return false;
 #else
 	float dir_norm = m_Normal.DotProduct(ray.Direction());
 
 	if (abs(dir_norm) < numeric_limits<float>::epsilon())
-		return nullptr;
+		return false;
 
 	if (dir_norm > 0.f && !m_IsDoubleSided)
-		return nullptr;
+		return false;
 
 	float orig_norm = m_Normal.DotProduct(ray.Origin());
-	float t = -(orig_norm + *m_D) / dir_norm;
+	t = -(orig_norm + m_D) / dir_norm;
 
 	if (!Math::Contain(t, ray.EffectRange()))
-		return nullptr;
+		return false;
 
 	Vector3 p_hit = ray.Origin() + ray.Direction() * t;
 
@@ -108,25 +106,28 @@ shared_ptr<Intersection> Triangle::Intersect(const Ray& ray) const
 	Vector3 v0_p = p_hit - *m_V0;
 	Vector3 v1_p = p_hit - *m_V1;
 
-	ParycentricCoord coord;
-
 	coord.v = m_Normal.DotProduct(v0_v1.CrossProduct(v0_p)) / m_NormalSqLength;
 
 	if (coord.v < 0.f || coord.v > 1.f)
-		return nullptr;
+		return false;
 
 	coord.w = m_Normal.DotProduct(v1_v2.CrossProduct(v1_p)) / m_NormalSqLength;
 
 	if (coord.w < 0.f || coord.w > 1.f)
-		return nullptr;
+		return false;
 
 	coord.u = 1.f - coord.v - coord.w;
 
 	if (coord.u < 0.f)
-		return nullptr;
-
-	return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t, coord));
+		return false;
 #endif
+
+	intersection.SetDistance(t);
+	intersection.SetIntersectObject((IIntersectTarget*)this);
+	intersection.SetParycentricCoordinate(coord);
+	intersection.SetTestObject(&ray);
+
+	return true;
 }
 
 Triangle::~Triangle(void)

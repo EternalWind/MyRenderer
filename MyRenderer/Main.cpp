@@ -27,19 +27,31 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+	clock_t start1, start2, start3, end1, end2, end3;
+
+	start1 = clock();
 	shared_ptr<Renderer> renderer(new RayTracer());
 	shared_ptr<Image> image(new Image(640, 480));
 	shared_ptr<Scene> scene = renderer->AddScene(shared_ptr<Scene>(new Scene(ColorRGBA(0.f, 0.f, 0.f))));
-	scene->AddGeometry(PolygonGenerator::Sphere(1.f, 10));
+	scene->AddGeometry(PolygonGenerator::Sphere(1.f, 3));
 	shared_ptr<Camera> cam = scene->AddCamera(shared_ptr<Camera>(new Camera(image, Vector3(0.f, 0.f, 2.f))));
 	cam->SetNearClippingPlane(.1f);
 	cam->SetFarClippingPlane(10.f);
 
 	//renderer->AsWireFrame(true);
+	end1 = clock();
 
+	start2 = clock();
 	renderer->Render();
+	end2 = clock();
 
+	start3 = clock();
 	image->SaveAsPPM("Sphere.ppm");
+	end3 = clock();
+
+	cout << "Init: " << end1 - start1 << endl;
+	cout << "Render: " << end2 - start2 << endl;
+	cout << "Save to disk: " << end3 - start3 << endl;
 
 	system("pause");
 

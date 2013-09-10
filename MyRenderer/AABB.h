@@ -12,7 +12,7 @@ public:
 
 	Vector3 MaxExtent() const;
 
-	shared_ptr<Intersection> Intersect(const Ray& ray) const;
+	bool Intersect(const Ray& ray, Intersection& intersection) const;
 
 	~AABB(void);
 

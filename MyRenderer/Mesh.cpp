@@ -49,27 +49,29 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 				m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i));
 			}
 
-		index += vertices_per_polygon[i];
+			index += vertices_per_polygon[i];
 	}
 }
 
-shared_ptr<Intersection> Mesh::Intersect(const Ray& ray) const
+bool Mesh::Intersect(const Ray& ray, Intersection& intersection) const
 {
 	float closest_distance = ray.EffectRange().Max;
-	shared_ptr<Intersection> closest_hit = nullptr;
 
 	for (auto begin = m_Triangles.begin(); begin != m_Triangles.end(); ++begin)
 	{
-		auto hit = begin->Intersect(ray);
+		Intersection hit;
 
-		if (hit.get() != nullptr && hit->Distance() < closest_distance)
+		if (begin->Intersect(ray, hit) && hit.Distance() < closest_distance)
 		{
-			closest_distance = hit->Distance();
-			closest_hit = hit;
+			closest_distance = hit.Distance();
+			intersection = hit;
 		}
 	}
 
-	return closest_hit;
+	if (closest_distance < ray.EffectRange().Max)
+		return true;
+	else
+		return false;
 }
 
 Mesh::~Mesh(void)

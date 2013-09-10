@@ -14,6 +14,6 @@ public:
 protected:
 	virtual ColorRGBA Trace(const Ray& ray, const List(IIntersectTarget)& geometries, const ColorRGBA& background_color = ColorRGBA()) const;
 
-	virtual ColorRGBA Shade(const Ray& ray, shared_ptr<Intersection> intersection) const;
+	virtual ColorRGBA Shade(const Ray& ray, const Intersection& intersection) const;
 };
 

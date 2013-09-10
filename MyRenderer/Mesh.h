@@ -11,7 +11,7 @@ class Mesh :
 public:
 	Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, const unsigned* vertex_index_buffer = nullptr);
 
-	shared_ptr<Intersection> Intersect(const Ray& ray) const;
+	bool Intersect(const Ray& ray, Intersection& intersection) const;
 
 	~Mesh(void);
 

@@ -14,7 +14,7 @@ class Intersection;
 class IIntersectTarget
 {
 public:
-	virtual shared_ptr<Intersection> Intersect(const Ray& ray) const = 0;
+	virtual bool Intersect(const Ray& ray, Intersection& intersection) const = 0;
 
 	virtual ~IIntersectTarget() = 0 {}
 };

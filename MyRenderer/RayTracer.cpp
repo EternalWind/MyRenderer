@@ -63,26 +63,26 @@ void RayTracer::Render() const
 
 ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometries, const ColorRGBA& background_color) const
 {
-	shared_ptr<Intersection> closest_hit(nullptr);
-	float cloest_distance = numeric_limits<float>::max();
+	Intersection closest_hit;
+	float cloest_distance = ray.EffectRange().Max;
 
 	for (auto iter_g = geometries.begin(); iter_g != geometries.end(); ++iter_g)
 	{
 		auto geometry = *iter_g;
-		shared_ptr<Intersection> hit = geometry->Intersect(ray);
+		Intersection hit;
 
-		if (hit.get() != nullptr && hit->Distance() < cloest_distance)
+		if (geometry->Intersect(ray, hit) && hit.Distance() < cloest_distance)
 		{
 			closest_hit = hit;
-			cloest_distance = hit->Distance();
+			cloest_distance = hit.Distance();
 		}
 	}
 
 	if (m_IsWireFrame)
 	{
-		if (closest_hit.get() != nullptr)
+		if (cloest_distance < ray.EffectRange().Max)
 		{
-			ParycentricCoord uvw = closest_hit->ParycentricCoordinate();
+			ParycentricCoord uvw = closest_hit.ParycentricCoordinate();
 			float epsilon = 0.01f;
 
 			if (uvw.u < epsilon || uvw.v < epsilon || uvw.w < epsilon)
@@ -93,16 +93,16 @@ ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometr
 	}
 	else
 	{
-		if (closest_hit.get() != nullptr)
+		if (cloest_distance < ray.EffectRange().Max)
 			return Shade(ray, closest_hit);
 		else
 			return background_color;
 	}
 }
 
-ColorRGBA RayTracer::Shade(const Ray& ray, shared_ptr<Intersection> intersection) const
+ColorRGBA RayTracer::Shade(const Ray& ray, const Intersection& intersection) const
 {
-	auto uvw = intersection->ParycentricCoordinate();
+	auto uvw = intersection.ParycentricCoordinate();
 
 	return ColorRGBA(uvw.u, uvw.v, uvw.w);
 }

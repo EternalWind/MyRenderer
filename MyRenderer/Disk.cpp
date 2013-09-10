@@ -8,21 +8,21 @@ Disk::Disk(float radius, const Vector3& center, const Vector3& orientation, cons
 {
 }
 
-shared_ptr<Intersection> Disk::Intersect(const Ray& ray) const
+bool Disk::Intersect(const Ray& ray, Intersection& intersection) const
 {
 	Range<float> orig_range = ray.EffectRange();
-	shared_ptr<Intersection> intersection = Plane::Intersect(ray);
+	bool flag = Plane::Intersect(ray, intersection);
 
-	if (intersection.get() != nullptr)
+	if (flag)
 	{
-		Vector3 intersect_point = ray.Origin() + ray.Direction() * intersection->Distance();
+		Vector3 intersect_point = ray.Origin() + ray.Direction() * intersection.Distance();
 		float distance_sq = (intersect_point - m_Center).SquareLength();
 
-		if (distance_sq <= m_SquareRadius)
-			return intersection;
+		if (distance_sq > m_SquareRadius)
+			flag = false;
 	}
 
-	return nullptr;
+	return flag;
 }
 
 Disk::~Disk(void)

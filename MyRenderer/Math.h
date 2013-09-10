@@ -101,5 +101,5 @@ inline bool Math::Overlap(const Range<T>& range1, const Range<T>& range2)
 template <class T>
 inline bool Math::Contain(const T& value, const Range<T>& range)
 {
-	return value <= range.Max && value >= range.Min;
+	return value < range.Max && value > range.Min;
 }

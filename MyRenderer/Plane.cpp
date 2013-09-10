@@ -9,22 +9,27 @@ Plane::Plane(const Vector3& center, const Vector3& orientation, const ColorRGBA&
 	m_Orientation.Normalise();
 }
 
-shared_ptr<Intersection> Plane::Intersect(const Ray& ray) const
+bool Plane::Intersect(const Ray& ray, Intersection& intersection) const
 {
 	float dir_norm = ray.Direction().DotProduct(m_Orientation);
 
 	if (abs(dir_norm) < std::numeric_limits<float>::epsilon())
-		return nullptr;
+		return false;
 
 	float t = (m_Center - ray.Origin()).DotProduct(m_Orientation) / dir_norm;
 
 	Range<float> range = ray.EffectRange();
+
 	if (Math::Contain(t, range))
 	{
-		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t));
+		intersection.SetDistance(t);
+		intersection.SetIntersectObject((IIntersectTarget*)this);
+		intersection.SetTestObject(&ray);
+
+		return true;
 	}
 
-	return nullptr;
+	return false;
 }
 
 Plane::~Plane(void)

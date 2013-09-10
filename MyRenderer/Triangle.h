@@ -10,7 +10,7 @@ public:
 
 	Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f), bool is_double_sided = false);
 
-	shared_ptr<Intersection> Intersect(const Ray& ray) const;
+	bool Intersect(const Ray& ray, Intersection& intersection) const;
 
 	bool IsDoubleSided() const;
 
@@ -22,7 +22,10 @@ private:
 	const Vector3* m_V0;
 	const Vector3* m_V1;
 	const Vector3* m_V2;
+
 	Vector3 m_Normal;
+	Vector3 m_V0V1;
+	Vector3 m_V0V2;
 	
 	float m_D;
 	float m_NormalSqLength;

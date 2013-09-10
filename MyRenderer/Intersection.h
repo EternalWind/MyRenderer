@@ -16,7 +16,8 @@ struct ParycentricCoord
 class Intersection
 {
 public:
-	Intersection(const Ray* test_object, IIntersectTarget* intersect_object, float distance, const ParycentricCoord& uvw = ParycentricCoord());
+	Intersection(const Ray* test_object = nullptr, IIntersectTarget* intersect_object = nullptr, 
+		float distance = numeric_limits<float>::max(), const ParycentricCoord& uvw = ParycentricCoord());
 
 	const Ray* TestObject() const;
 

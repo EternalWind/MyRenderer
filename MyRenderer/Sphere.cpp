@@ -11,7 +11,7 @@ Sphere::Sphere(const Vector3& center, float radius, const ColorRGBA& color) :
 {
 }
 
-shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
+bool Sphere::Intersect(const Ray& ray, Intersection& intersection) const
 {
 	Range<float> t;
 
@@ -23,7 +23,7 @@ shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
 
 	if (d_sq > r_sq)
 	{
-		return nullptr;
+		return false;
 	}
 	else if (d_sq == r_sq)
 	{
@@ -43,22 +43,22 @@ shared_ptr<Intersection> Sphere::Intersect(const Ray& ray) const
 	float c = translated_origin.SquareLength() - m_Radius * m_Radius;
 
 	if (!Math::SolveQuadratic(a, b, c, t.Min, t.Max))
-		return nullptr;
+		return false;
 #endif
 
 	Range<float> range = ray.EffectRange();
 
 	if (Math::Contain(t.Min, range))
-	{
-		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Min));
-	}
+		intersection.SetDistance(t.Min);
+	else if (Math::Contain(t.Max, range))
+		intersection.SetDistance(t.Max);
+	else
+		return false;
 
-	if (Math::Contain(t.Max, range))
-	{
-		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Max));
-	}
+	intersection.SetIntersectObject((IIntersectTarget*)this);
+	intersection.SetTestObject(&ray);
 
-	return nullptr;
+	return true;
 }
 
 shared_ptr<Mesh> Sphere::ToMesh(unsigned divs) const

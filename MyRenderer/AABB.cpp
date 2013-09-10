@@ -12,7 +12,7 @@ AABB::~AABB(void)
 {
 }
 
-shared_ptr<Intersection> AABB::Intersect(const Ray& ray) const
+bool AABB::Intersect(const Ray& ray, Intersection& intersection) const
 {
 	Vector3 origin = ray.Origin();
 	Vector3 inversed_dir = ray.InvDirection();
@@ -42,7 +42,7 @@ shared_ptr<Intersection> AABB::Intersect(const Ray& ray) const
 	}
 
 	if (t.Min > t_y.Max || t_y.Min > t.Max)
-		return nullptr;
+		return false;
 
 	if (t.Min < t_y.Min)
 		t.Min = t_y.Min;
@@ -61,7 +61,7 @@ shared_ptr<Intersection> AABB::Intersect(const Ray& ray) const
 	}
 
 	if (t.Min > t_z.Max || t_z.Min > t.Max)
-		return nullptr;
+		return false;
 
 	if (t.Min < t_z.Min)
 		t.Min = t_z.Min;
@@ -71,15 +71,14 @@ shared_ptr<Intersection> AABB::Intersect(const Ray& ray) const
 	Range<float> range = ray.EffectRange();
 
 	if (Math::Contain(t.Min, range))
-	{
-		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Min));
-	}
+		intersection.SetDistance(t.Min);
 	else if (Math::Contain(t.Max, range))
-	{
-		return shared_ptr<Intersection>(new Intersection(&ray, (IIntersectTarget*)this, t.Max));
-	}
+		intersection.SetDistance(t.Max);
 	else
-	{
-		return nullptr;
-	}
+		return false;
+
+	intersection.SetIntersectObject((IIntersectTarget*)this);
+	intersection.SetTestObject(&ray);
+
+	return true;
 }
