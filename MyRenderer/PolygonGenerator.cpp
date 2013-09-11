@@ -14,7 +14,7 @@ shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vec
 
 	float u = 0.f;
 	float v = 0.f;
-	float du = (float)M_PI / (divs - 1);
+	float du = (float)M_PI / divs;
 	float dv = (float)M_PI * 2 / divs;
 
 	Vector3* vertices = new Vector3[vertex_num];
@@ -29,8 +29,8 @@ shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vec
 		u += du;
 		for (unsigned j = 0; j < divs; ++j, ++k)
 		{
-			v += dv;
 			vertices[k] = Vector3(SphericalCoord(u, v, radius));
+			v -= dv;
 		}
 	}
 	vertices[k] = Vector3(SphericalCoord((float)M_PI, 0.f, radius));
@@ -60,7 +60,7 @@ shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vec
 				vertices_per_polygon[polygon] = 3;
 
 				indices[index] = vid - divs + 1 + j;
-				indices[index + 1] = index_num - 1;
+				indices[index + 1] = vertex_num - 1;
 				indices[index + 2] = j == divs - 1 ? vid - divs + 1 : vid - divs + 2 + j;
 
 				index += 3;

@@ -79,7 +79,7 @@ bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 	coord.v *= det_inv;
 	coord.w = 1 - coord.u - coord.v;
 
-	t = m_V0V2.DotProduct(qvec);
+	t = m_V0V2.DotProduct(qvec) * det_inv;
 
 	if (!Math::Contain(t, ray.EffectRange()))
 		return false;
