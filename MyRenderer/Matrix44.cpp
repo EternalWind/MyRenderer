@@ -42,8 +42,13 @@ Matrix44 Matrix44::operator * (const Matrix44& right) const
 
 	for (unsigned i = 0; i < 4; ++i)
 		for (unsigned j = 0; j < 4; ++j)
-			for (unsigned k = 0; k < 4; ++k)
-				product.m_Coefficients[i][j] += left.m_Coefficients[i][k] * right.m_Coefficients[k][j];
+		{
+			product.m_Coefficients[i][j] = 
+				left.m_Coefficients[i][0] * right.m_Coefficients[0][j] +
+				left.m_Coefficients[i][1] * right.m_Coefficients[1][j] +
+				left.m_Coefficients[i][2] * right.m_Coefficients[2][j] +
+				left.m_Coefficients[i][3] * right.m_Coefficients[3][j];
+		}
 
 	return product;
 }

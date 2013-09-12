@@ -119,5 +119,5 @@ Vector3 BezierCurve<n>::PointAtDCA(float t, const Vector3* cps, unsigned length)
 template <size_t n>
 unsigned BezierCurve<n>::Factorial(unsigned x) const
 {
-	return x == 0 || x == 1 ? 1 : Factorial(x - 1);
+	return x == 0 || x == 1 ? 1 : x * Factorial(x - 1);
 }

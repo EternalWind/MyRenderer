@@ -32,24 +32,27 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 	for (unsigned i = 0; i < polygon_count; ++i)
 	{
 		for (unsigned j = 1; j < vertices_per_polygon[i] - 1; ++j)
+		{
+			Vector3* v1_i = nullptr;
+			Vector3* v2_i = nullptr;
+			Vector3* v3_i = nullptr;
+
 			if (vertex_index_buffer != nullptr)
 			{
-				const Vector3* v1_i = m_Vertices.data() + vertex_index_buffer[index];
-				const Vector3* v2_i = m_Vertices.data() + vertex_index_buffer[index + j];
-				const Vector3* v3_i = m_Vertices.data() + vertex_index_buffer[index + j + 1];
-
-				m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i));
+				v1_i = m_Vertices.data() + vertex_index_buffer[index];
+				v2_i = m_Vertices.data() + vertex_index_buffer[index + j];
+				v3_i = m_Vertices.data() + vertex_index_buffer[index + j + 1];
 			}
 			else
 			{
-				const Vector3* v1_i = m_Vertices.data() + index;
-				const Vector3* v2_i = m_Vertices.data() + index + j;
-				const Vector3* v3_i = m_Vertices.data() + index + j + 1;
-
-				m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i));
+				v1_i = m_Vertices.data() + index;
+				v2_i = m_Vertices.data() + index + j;
+				v3_i = m_Vertices.data() + index + j + 1;
 			}
 
-			index += vertices_per_polygon[i];
+			m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i));
+		}
+		index += vertices_per_polygon[i];
 	}
 }
 

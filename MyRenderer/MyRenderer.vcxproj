@@ -91,6 +91,7 @@
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SpectralData.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="teapotdata.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="Vector.h" />
     <ClInclude Include="Vector3.h" />

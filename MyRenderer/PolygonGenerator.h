@@ -27,8 +27,8 @@ shared_ptr<Mesh> PolygonGenerator::Surface(const BezierSurface<rows, columns>& b
 	float u = 0.f;
 	float v = 0.f;
 
-	float du = 1 / divs;
-	float dv = 1 / divs;
+	float du = 1.0f / divs;
+	float dv = 1.0f / divs;
 
 	array < BezierCurve<columns>, rows > curves;
 
@@ -44,16 +44,20 @@ shared_ptr<Mesh> PolygonGenerator::Surface(const BezierSurface<rows, columns>& b
 
 		BezierCurve<rows> curve(cps);
 
+		v = 0.f;
 		for (unsigned j = 0; j < divs + 1; ++j)
 		{
-			vertices[i * (divs + 1) + j] = curve.PointAt(v);
+			unsigned index = i * (divs + 1) + j;
+			vertices[index] = curve.PointAt(v);
 			v += dv;
 		}
 
 		u += du;
 	}
 
-	for (unsigned i = 0, unsigned k = 0; i < divs; ++i)
+	unsigned k = 0;
+
+	for (unsigned i = 0; i < divs; ++i)
 		for (unsigned j = 0; j < divs; ++j, ++k)
 		{
 			vertices_per_polygon[k] = 4;
@@ -63,11 +67,7 @@ shared_ptr<Mesh> PolygonGenerator::Surface(const BezierSurface<rows, columns>& b
 			indices[k * 4 + 3] = i * (divs + 1) + j + 1;
 		}
 
-		auto mesh = shared_ptr<Mesh>(new Mesh(divs * divs, vertices_per_polygon, vertices, indices));
-
-		delete[] vertices;
-		delete[] vertices_per_polygon;
-		delete[] indices;
+		auto mesh = shared_ptr<Mesh>(new Mesh(divs * divs, vertices_per_polygon.data(), vertices.data(), indices.data()));
 
 		return mesh;
 }

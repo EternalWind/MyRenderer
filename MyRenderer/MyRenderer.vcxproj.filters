@@ -37,6 +37,9 @@
     <Filter Include="Source Files\Geometry">
       <UniqueIdentifier>{c933a734-4c36-42fd-8558-d8815bc1078b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Data">
+      <UniqueIdentifier>{eacb8a03-8481-4ec5-b2d7-a160acad8aea}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Vector.h">
@@ -122,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="BezierSurface.h">
       <Filter>Header Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="teapotdata.h">
+      <Filter>Header Files\Data</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

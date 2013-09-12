@@ -32,8 +32,6 @@ public:
 
 	void SetFOV(float fov);
 
-	void Render();
-
 	float NearClippingPlane() const;
 
 	float FarClippingPlane() const;
