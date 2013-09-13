@@ -2,29 +2,29 @@
 
 #include <array>
 
-#include "Vector3.h"
+#include "ICurve.h"
 
 template <size_t n>
-class BezierCurve
+class BezierCurve : public ICurve
 {
 public:
-	BezierCurve(array<Vector3, n> control_points = array<Vector3, n>());
+	BezierCurve(Vector3 control_points[n] = nullptr);
 
 	Vector3 ControlPoint(unsigned i) const;
 
 	void SetControlPoint(unsigned i, const Vector3& value);
 
-	Vector3 PointAt(float t);
+	Vector3 PointAt(float t) const;
 
-	Vector3 PointAtDCA(float t, const Vector3* cps = nullptr, unsigned length = n);
+	Vector3 PointAtDCA(float t, const Vector3* cps = nullptr, unsigned length = n) const;
 
 	pair<BezierCurve<n>, BezierCurve<n>> SplitAt(float t);
 
 private:
 	unsigned Factorial(unsigned n) const;
 
-	array<Vector3, n> m_ControlPoints;
-	array<unsigned, n> m_Factorials;
+	Vector3 m_ControlPoints[n];
+	unsigned m_Factorials[n];
 };
 
 typedef BezierCurve<4> BezierCurveCubic;
@@ -32,9 +32,11 @@ typedef BezierCurve<4> BezierCurveCubic;
 // Implementation for template methods.
 
 template <size_t n>
-BezierCurve<n>::BezierCurve(array<Vector3, n> control_points) :
-	m_ControlPoints(control_points) 
+BezierCurve<n>::BezierCurve(Vector3 control_points[n])
 {
+	if (control_points != nullptr)
+		memcpy_s(m_ControlPoints, sizeof(Vector3) * n, control_points, sizeof(Vector3) * n);
+
 	for (unsigned i = 0; i < n; ++i)
 	{
 		m_Factorials[i] = Factorial(i);
@@ -54,7 +56,7 @@ void BezierCurve<n>::SetControlPoint(unsigned i, const Vector3& value)
 }
 
 template <size_t n>
-Vector3 BezierCurve<n>::PointAt(float t)
+Vector3 BezierCurve<n>::PointAt(float t) const
 {
 	Vector3 result;
 
@@ -70,15 +72,15 @@ Vector3 BezierCurve<n>::PointAt(float t)
 template <size_t n>
 pair<BezierCurve<n>, BezierCurve<n>> BezierCurve<n>::SplitAt(float t)
 {
-	array<Vector3, n> cps1;
-	array<Vector3, n> cps2;
+	Vector3 cps1[n];
+	Vector3 cps2[n];
 	
 	unsigned length = n;
 	unsigned i = 0;
 
-	Vector3* temp = new Vector3[n];
+	Vector3 temp[n];
 
-	memcpy(temp, m_ControlPoints.data(), sizeof(Vector3) * n);
+	memcpy_s(temp, sizeof(Vector3) * n, m_ControlPoints.data(), sizeof(Vector3) * n);
 
 	while (length > 0)
 	{
@@ -98,7 +100,7 @@ pair<BezierCurve<n>, BezierCurve<n>> BezierCurve<n>::SplitAt(float t)
 }
 
 template <size_t n>
-Vector3 BezierCurve<n>::PointAtDCA(float t, const Vector3* cps, unsigned length)
+Vector3 BezierCurve<n>::PointAtDCA(float t, const Vector3* cps, unsigned length) const
 {
 	if (cps == nullptr)
 		cps = m_ControlPoints.data();

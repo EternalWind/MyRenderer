@@ -75,6 +75,7 @@
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Disk.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="ICurve.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PolygonGenerator.h" />
     <ClInclude Include="Shape.h" />

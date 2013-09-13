@@ -1,5 +1,6 @@
 #include "PolygonGenerator.h"
 #include "Exception.h"
+#include "teapotdata.h"
 
 shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vector3& position)
 {
@@ -88,4 +89,30 @@ shared_ptr<Mesh> PolygonGenerator::Sphere(float radius, unsigned divs, const Vec
 	delete[] vertices_per_polygon;
 
 	return mesh;
+}
+
+MeshGroup PolygonGenerator::Teapot(unsigned divs, bool is_order_inversed)
+{
+	MeshGroup meshes;
+
+	for (unsigned p = 0; p < kTeapotNumPatches; ++p)
+	{
+		BezierSurface<4, 4> patch;
+		unsigned* patch_data = teapotPatches[p];
+
+		for (unsigned i = 0; i < 4; ++i)
+			for (unsigned j = 0; j < 4; ++j)
+			{
+				unsigned index = i * 4 + j;
+
+				patch.SetControlPoint(i, j, Vector3(
+					teapotVertices[patch_data[index] - 1][0],
+					teapotVertices[patch_data[index] - 1][1],
+					teapotVertices[patch_data[index] - 1][2]));
+			}
+
+			meshes.push_back(PolygonGenerator::Surface(patch, divs, is_order_inversed));
+	}
+
+	return meshes;
 }

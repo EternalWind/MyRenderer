@@ -129,6 +129,9 @@
     <ClInclude Include="teapotdata.h">
       <Filter>Header Files\Data</Filter>
     </ClInclude>
+    <ClInclude Include="ICurve.h">
+      <Filter>Header Files\Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3.cpp">

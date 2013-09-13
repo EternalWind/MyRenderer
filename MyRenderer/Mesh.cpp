@@ -1,7 +1,9 @@
 #include "Mesh.h"
 
 
-Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, const unsigned* vertex_index_buffer)
+Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, 
+		   const unsigned* vertex_index_buffer, bool is_double_sided)
+		   : m_IsDoubleSided(is_double_sided)
 {
 	unsigned vertex_count = 0;
 	unsigned vertex_index_count = 0;
@@ -50,7 +52,7 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 				v3_i = m_Vertices.data() + index + j + 1;
 			}
 
-			m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i));
+			m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i, ColorRGBA(1.f, 1.f, 1.f), is_double_sided));
 		}
 		index += vertices_per_polygon[i];
 	}
@@ -75,6 +77,22 @@ bool Mesh::Intersect(const Ray& ray, Intersection& intersection) const
 		return true;
 	else
 		return false;
+}
+
+bool Mesh::IsDoubleSided() const
+{
+	return m_IsDoubleSided;
+}
+
+void Mesh::EnableDoubleSided(bool is_double_sided)
+{
+	if (m_IsDoubleSided != is_double_sided)
+	{
+		m_IsDoubleSided = is_double_sided;
+
+		for (auto iter = m_Triangles.begin(); iter != m_Triangles.end(); ++iter)
+			iter->EnableDoubleSided(is_double_sided);
+	}
 }
 
 Mesh::~Mesh(void)
