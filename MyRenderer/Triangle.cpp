@@ -1,5 +1,11 @@
 #include "Triangle.h"
+#include "Profiler.h"
 
+Triangle::Triangle() :
+	Shape(ColorRGBA())
+{
+	++Profiler::numTriangles;
+}
 
 Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color, bool is_double_sided) :
 	Shape(color),
@@ -17,10 +23,29 @@ Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, cons
 	m_NormalSqLength = m_Normal.SquareLength();
 
 	m_D = -(m_Normal.DotProduct(*m_V0));
+
+	++Profiler::numTriangles;
+}
+
+Triangle::Triangle(const Triangle& other) :
+	Shape(other.m_Color),
+	m_V0(other.m_V0),
+	m_V1(other.m_V1),
+	m_V2(other.m_V2),
+	m_Normal(other.m_Normal),
+	m_V0V1(other.m_V0V1),
+	m_V0V2(other.m_V0V2),
+	m_D(other.m_D),
+	m_NormalSqLength(other.m_NormalSqLength),
+	m_IsDoubleSided(other.m_IsDoubleSided)
+{
+	++Profiler::numTriangles;
 }
 
 bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 {
+	Profiler::numRayTestsPerFrame++;
+
 	float t = 0.f;
 	ParycentricCoord coord;
 
@@ -43,7 +68,9 @@ bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 		coord.u = tvec.DotProduct(pvec);
 
 		if (coord.u < 0.f || coord.u > det)
+		{
 			return false;
+		}
 
 		coord.v = ray.Direction().DotProduct(qvec);
 
@@ -127,9 +154,12 @@ bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 	intersection.SetParycentricCoordinate(coord);
 	intersection.SetTestObject(&ray);
 
+	++Profiler::numIntersectionPerFrame;
+
 	return true;
 }
 
 Triangle::~Triangle(void)
 {
+	--Profiler::numTriangles;
 }

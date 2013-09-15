@@ -6,9 +6,11 @@ class Triangle :
 	public Shape
 {
 public:
-	Triangle() : Shape(ColorRGBA()) {}
+	Triangle();
 
 	Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f), bool is_double_sided = false);
+
+	Triangle(const Triangle& other);
 
 	bool Intersect(const Ray& ray, Intersection& intersection) const;
 

@@ -7,6 +7,7 @@
 #include <random>
 #include <list>
 #include <array>
+#include <atomic>
 
 #include "Matrix44.h"
 #include "Math.h"
@@ -22,14 +23,12 @@
 #include "Triangle.h"
 #include "PolygonGenerator.h"
 #include "BezierCurve.h"
+#include "Profiler.h"
 
 using namespace std;
 
 int main(int argc, char** argv)
 {
-	clock_t start1, start2, start3, end1, end2, end3;
-
-	start1 = clock();
 	shared_ptr<Renderer> renderer(new RayTracer());
 	shared_ptr<Image> image(new Image(640, 480));
 	shared_ptr<Scene> scene = renderer->AddScene(shared_ptr<Scene>(new Scene(ColorRGBA(0.f, 0.f, 0.f))));
@@ -55,27 +54,33 @@ int main(int argc, char** argv)
 	cam->Transform(trans1);
 	cam->Transform(trans2);
 
-	MeshGroup meshes = PolygonGenerator::Teapot(4, true);
+	MeshGroup meshes = PolygonGenerator::Teapot(16, true);
 
-	/*for (auto iter = meshes.begin(); iter != meshes.end(); ++iter)
-		scene->AddGeometry(*iter);*/
-	scene->AddGeometry(PolygonGenerator::Sphere(1.f, 24));
+	for (auto iter = meshes.begin(); iter != meshes.end(); ++iter)
+	{
+		scene->AddGeometry(*iter);
+	}
 
-	//renderer->AsWireFrame(true);
+	//unsigned vp[1] = { 3 };
+	//Vector3 v[3] = { Vector3(-1.f, -1.f), Vector3(1.f, -1.f), Vector3(0.f, 1.f) };
 
-	end1 = clock();
+	//scene->AddGeometry(shared_ptr<Mesh>(new Mesh(1, vp, v)));
 
-	start2 = clock();
 	renderer->Render();
-	end2 = clock();
 
-	start3 = clock();
 	image->SaveAsPPM("Sphere3.ppm");
-	end3 = clock();
 
-	cout << "Init: " << end1 - start1 << endl;
-	cout << "Render: " << end2 - start2 << endl;
-	cout << "Save to disk: " << end3 - start3 << endl;
+	cout << "Profile: " << endl;
+
+	cout << endl;
+	cout << endl;
+
+	cout << "Triangles: " << Profiler::numTriangles << endl;
+	cout << "Primary Rays Per Frame: " << Profiler::numPrimaryRaysPerFrame << endl;
+	cout << "Ray-Triangle Tests Per Frame: " << Profiler::wtf << endl;
+	cout << "Intersections Per Frame: " << Profiler::numIntersectionPerFrame << endl;
+	cout << endl;
+	cout << "Rendering Time Per Frame: " << Profiler::renderTimePerFrame << endl;
 
 	system("pause");
 

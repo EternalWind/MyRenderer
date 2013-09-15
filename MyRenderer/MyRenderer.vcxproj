@@ -58,6 +58,8 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_USE_MATH_DEFINES;MOLLER_TRUMBORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <EnableFiberSafeOptimizations>false</EnableFiberSafeOptimizations>
+      <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -78,6 +80,7 @@
     <ClInclude Include="ICurve.h" />
     <ClInclude Include="Mesh.h" />
     <ClInclude Include="PolygonGenerator.h" />
+    <ClInclude Include="Profiler.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="IIntersectTarget.h" />
     <ClInclude Include="Image.h" />
@@ -106,6 +109,7 @@
     <ClCompile Include="Exception.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="PolygonGenerator.cpp" />
+    <ClCompile Include="Profiler.cpp" />
     <ClCompile Include="Shape.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Intersection.cpp" />

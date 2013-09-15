@@ -1,4 +1,5 @@
 #include "RayTracer.h"
+#include "Profiler.h"
 
 #include <time.h>
 
@@ -8,6 +9,13 @@ RayTracer::RayTracer(void)
 
 void RayTracer::Render() const
 {
+	clock_t start, end;
+	start = clock();
+
+	Profiler::numPrimaryRaysPerFrame = 0;
+	Profiler::numIntersectionPerFrame = 0;
+	Profiler::numRayTestsPerFrame = 0;
+
 	for (auto iter_s = m_Scenes.begin(); iter_s != m_Scenes.end(); ++iter_s)
 	{
 		auto scene = *iter_s;
@@ -54,11 +62,16 @@ void RayTracer::Render() const
 					ray_direction.Normalise();
 
 					Ray ray(cam_pos, ray_direction, Range<float>(near, far));
+					++Profiler::numPrimaryRaysPerFrame;
 
 					render_target->SetPixel(i, j, Trace(ray, geometries, background_color));
 				}
 		}
 	}
+
+	end = clock();
+
+	Profiler::renderTimePerFrame = float(end - start) / CLOCKS_PER_SEC;
 }
 
 ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometries, const ColorRGBA& background_color) const
