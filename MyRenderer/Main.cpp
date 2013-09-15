@@ -77,7 +77,7 @@ int main(int argc, char** argv)
 
 	cout << "Triangles: " << Profiler::numTriangles << endl;
 	cout << "Primary Rays Per Frame: " << Profiler::numPrimaryRaysPerFrame << endl;
-	cout << "Ray-Triangle Tests Per Frame: " << Profiler::wtf << endl;
+	cout << "Ray-Triangle Tests Per Frame: " << Profiler::numRayTestsPerFrame << endl;
 	cout << "Intersections Per Frame: " << Profiler::numIntersectionPerFrame << endl;
 	cout << endl;
 	cout << "Rendering Time Per Frame: " << Profiler::renderTimePerFrame << endl;
