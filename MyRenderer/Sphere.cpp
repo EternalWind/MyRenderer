@@ -5,7 +5,7 @@
 //#define USE_GEOMETRIC
 
 Sphere::Sphere(const Vector3& center, float radius, const ColorRGBA& color) :
-	Shape(color),
+	Primitive(color),
 	m_Center(center),
 	m_Radius(radius)
 {

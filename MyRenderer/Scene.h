@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Camera.h"
-#include "IIntersectTarget.h"
+#include "Object.h"
 
 using namespace std;
 
@@ -19,9 +19,9 @@ public:
 
 	List(Camera) Cameras() const;
 
-	shared_ptr<IIntersectTarget> AddGeometry(shared_ptr<IIntersectTarget> geometry);
+	shared_ptr<Object> AddGeometry(shared_ptr<Object> geometry);
 
-	List(IIntersectTarget) Geometries() const;
+	List(Object) Geometries() const;
 
 	ColorRGBA BackgroundColor() const;
 
@@ -31,7 +31,7 @@ public:
 
 private:
 	List(Camera) m_Cameras;
-	List(IIntersectTarget) m_Geometries;
+	List(Object) m_Geometries;
 	ColorRGBA m_BackgroundColor;
 };
 

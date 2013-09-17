@@ -1,19 +1,31 @@
 #include "AABB.h"
-
+#include "Profiler.h"
 
 AABB::AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA& color) :
-	Shape(color),
+	Primitive(color),
 	m_MinExtent(min_extent),
 	m_MaxExtent(max_extent)
 {
+	++Profiler::numAABBs;
+}
+
+AABB::AABB(const AABB& other) :
+	Primitive(other.m_Color),
+	m_MinExtent(other.m_MinExtent),
+	m_MaxExtent(other.m_MaxExtent)
+{
+	++Profiler::numAABBs;
 }
 
 AABB::~AABB(void)
 {
+	--Profiler::numAABBs;
 }
 
 bool AABB::Intersect(const Ray& ray, Intersection& intersection) const
 {
+	++Profiler::numRayAABBTestsPerFrame;
+
 	Vector3 origin = ray.Origin();
 	Vector3 inversed_dir = ray.InvDirection();
 

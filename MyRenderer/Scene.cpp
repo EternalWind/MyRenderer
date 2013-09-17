@@ -17,13 +17,13 @@ List(Camera) Scene::Cameras() const
 	return m_Cameras;
 }
 
-shared_ptr<IIntersectTarget> Scene::AddGeometry(shared_ptr<IIntersectTarget> geometry)
+shared_ptr<Object> Scene::AddGeometry(shared_ptr<Object> geometry)
 {
 	m_Geometries.push_back(geometry);
 	return geometry;
 }
 
-List(IIntersectTarget) Scene::Geometries() const
+List(Object) Scene::Geometries() const
 {
 	return m_Geometries;
 }

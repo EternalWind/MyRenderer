@@ -14,6 +14,8 @@ public:
 	static atomic<float> renderTimePerFrame;
 	static atomic_ullong numTriangles;
 	static atomic_ullong numPrimaryRaysPerFrame;
-	static atomic_ullong numRayTestsPerFrame;
+	static atomic_ullong numRayTriangleTestsPerFrame;
 	static atomic_ullong numIntersectionPerFrame;
+	static atomic_ullong numRayAABBTestsPerFrame;
+	static atomic_ullong numAABBs;
 };

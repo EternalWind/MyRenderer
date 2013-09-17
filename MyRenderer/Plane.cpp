@@ -2,7 +2,7 @@
 
 
 Plane::Plane(const Vector3& center, const Vector3& orientation, const ColorRGBA& color) :
-	Shape(color),
+	Primitive(color),
 	m_Center(center),
 	m_Orientation(orientation)
 {

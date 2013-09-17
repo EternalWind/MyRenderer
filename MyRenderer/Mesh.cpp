@@ -1,9 +1,8 @@
 #include "Mesh.h"
-
+#include "AABB.h"
 
 Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, 
 		   const unsigned* vertex_index_buffer, bool is_double_sided)
-		   : m_IsDoubleSided(is_double_sided)
 {
 	unsigned vertex_count = 0;
 	unsigned vertex_index_count = 0;
@@ -56,9 +55,41 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 		}
 		index += vertices_per_polygon[i];
 	}
+
+	float max = numeric_limits<float>::max();
+	float min = -numeric_limits<float>::max();
+
+	Vector3 min_ext(max, max, max);
+	Vector3 max_ext(min, min, min);
+
+	for (auto iter = m_Vertices.begin(); iter != m_Vertices.end(); ++iter)
+	{
+		if (iter->X() > max_ext.X())
+			max_ext.SetX(iter->X());
+		if (iter->Y() > max_ext.Y())
+			max_ext.SetY(iter->Y());
+		if (iter->Z() > max_ext.Z())
+			max_ext.SetZ(iter->Z());
+
+		if (iter->X() < min_ext.X())
+			min_ext.SetX(iter->X());
+		if (iter->Y() < min_ext.Y())
+			min_ext.SetY(iter->Y());
+		if (iter->Z() < min_ext.Z())
+			min_ext.SetZ(iter->Z());
+	}
+
+	if (min_ext.X() != max && max_ext.X() != min)
+		m_BoundingVolume.reset(new AABB(min_ext, max_ext));
 }
 
-bool Mesh::Intersect(const Ray& ray, Intersection& intersection) const
+void Mesh::OnEnableDoubleSided(bool is_double_sided)
+{
+	for (auto iter = m_Triangles.begin(); iter != m_Triangles.end(); ++iter)
+		iter->EnableDoubleSided(is_double_sided);
+}
+
+bool Mesh::OnIntersect(const Ray& ray, Intersection& intersection) const
 {
 	float closest_distance = ray.EffectRange().Max;
 
@@ -77,22 +108,6 @@ bool Mesh::Intersect(const Ray& ray, Intersection& intersection) const
 		return true;
 	else
 		return false;
-}
-
-bool Mesh::IsDoubleSided() const
-{
-	return m_IsDoubleSided;
-}
-
-void Mesh::EnableDoubleSided(bool is_double_sided)
-{
-	if (m_IsDoubleSided != is_double_sided)
-	{
-		m_IsDoubleSided = is_double_sided;
-
-		for (auto iter = m_Triangles.begin(); iter != m_Triangles.end(); ++iter)
-			iter->EnableDoubleSided(is_double_sided);
-	}
 }
 
 Mesh::~Mesh(void)

@@ -2,13 +2,13 @@
 #include "Profiler.h"
 
 Triangle::Triangle() :
-	Shape(ColorRGBA())
+	Primitive(ColorRGBA())
 {
 	++Profiler::numTriangles;
 }
 
 Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color, bool is_double_sided) :
-	Shape(color),
+	Primitive(color),
 	m_V0(v0),
 	m_V1(v1),
 	m_V2(v2),
@@ -28,7 +28,7 @@ Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, cons
 }
 
 Triangle::Triangle(const Triangle& other) :
-	Shape(other.m_Color),
+	Primitive(other.m_Color),
 	m_V0(other.m_V0),
 	m_V1(other.m_V1),
 	m_V2(other.m_V2),
@@ -44,7 +44,7 @@ Triangle::Triangle(const Triangle& other) :
 
 bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
 {
-	Profiler::numRayTestsPerFrame++;
+	Profiler::numRayTriangleTestsPerFrame++;
 
 	float t = 0.f;
 	ParycentricCoord coord;

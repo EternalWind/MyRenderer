@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Shape.h"
+#include "Primitive.h"
 
 class Triangle :
-	public Shape
+	public Primitive
 {
 public:
 	Triangle();

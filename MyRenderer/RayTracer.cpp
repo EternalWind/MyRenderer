@@ -14,7 +14,8 @@ void RayTracer::Render() const
 
 	Profiler::numPrimaryRaysPerFrame = 0;
 	Profiler::numIntersectionPerFrame = 0;
-	Profiler::numRayTestsPerFrame = 0;
+	Profiler::numRayTriangleTestsPerFrame = 0;
+	Profiler::numRayAABBTestsPerFrame = 0;
 
 	for (auto iter_s = m_Scenes.begin(); iter_s != m_Scenes.end(); ++iter_s)
 	{
@@ -74,7 +75,7 @@ void RayTracer::Render() const
 	Profiler::renderTimePerFrame = float(end - start) / CLOCKS_PER_SEC;
 }
 
-ColorRGBA RayTracer::Trace(const Ray& ray, const List(IIntersectTarget)& geometries, const ColorRGBA& background_color) const
+ColorRGBA RayTracer::Trace(const Ray& ray, const List(Object)& geometries, const ColorRGBA& background_color) const
 {
 	Intersection closest_hit;
 	float cloest_distance = ray.EffectRange().Max;

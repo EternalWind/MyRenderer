@@ -1,10 +1,10 @@
 #pragma once
 
-#include "Shape.h"
+#include "Primitive.h"
 #include "Vector3.h"
 
 class Plane :
-	public Shape
+	public Primitive
 {
 public:
 	Plane(const Vector3& center = Vector3(), const Vector3& orientation = Vector3(0.f, 0.f, 1.f), const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
