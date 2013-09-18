@@ -6,7 +6,7 @@ AABB::AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA
 	m_MinExtent(min_extent),
 	m_MaxExtent(max_extent)
 {
-	++Profiler::numAABBs;
+	++Profiler::numBoundingVolumes;
 }
 
 AABB::AABB(const AABB& other) :
@@ -14,17 +14,17 @@ AABB::AABB(const AABB& other) :
 	m_MinExtent(other.m_MinExtent),
 	m_MaxExtent(other.m_MaxExtent)
 {
-	++Profiler::numAABBs;
+	++Profiler::numBoundingVolumes;
 }
 
 AABB::~AABB(void)
 {
-	--Profiler::numAABBs;
+	--Profiler::numBoundingVolumes;
 }
 
-bool AABB::Intersect(const Ray& ray, Intersection& intersection) const
+bool AABB::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
-	++Profiler::numRayAABBTestsPerFrame;
+	++Profiler::numRayVolumeTestsPerFrame;
 
 	Vector3 origin = ray.Origin();
 	Vector3 inversed_dir = ray.InvDirection();

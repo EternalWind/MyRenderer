@@ -1,5 +1,6 @@
 #include "RayTracer.h"
 #include "Profiler.h"
+#include "Volume.h"
 
 #include <time.h>
 
@@ -15,7 +16,7 @@ void RayTracer::Render() const
 	Profiler::numPrimaryRaysPerFrame = 0;
 	Profiler::numIntersectionPerFrame = 0;
 	Profiler::numRayTriangleTestsPerFrame = 0;
-	Profiler::numRayAABBTestsPerFrame = 0;
+	Profiler::numRayVolumeTestsPerFrame = 0;
 
 	for (auto iter_s = m_Scenes.begin(); iter_s != m_Scenes.end(); ++iter_s)
 	{
@@ -79,13 +80,14 @@ ColorRGBA RayTracer::Trace(const Ray& ray, const List(Object)& geometries, const
 {
 	Intersection closest_hit;
 	float cloest_distance = ray.EffectRange().Max;
+	Volume::PrecomputedValues values(ray);
 
 	for (auto iter_g = geometries.begin(); iter_g != geometries.end(); ++iter_g)
 	{
 		auto geometry = *iter_g;
 		Intersection hit;
 
-		if (geometry->Intersect(ray, hit) && hit.Distance() < cloest_distance)
+		if (geometry->Intersect(ray, hit, &values) && hit.Distance() < cloest_distance)
 		{
 			closest_hit = hit;
 			cloest_distance = hit.Distance();

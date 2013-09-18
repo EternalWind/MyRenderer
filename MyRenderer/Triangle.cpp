@@ -42,7 +42,7 @@ Triangle::Triangle(const Triangle& other) :
 	++Profiler::numTriangles;
 }
 
-bool Triangle::Intersect(const Ray& ray, Intersection& intersection) const
+bool Triangle::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	Profiler::numRayTriangleTestsPerFrame++;
 

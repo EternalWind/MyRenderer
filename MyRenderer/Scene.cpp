@@ -19,7 +19,9 @@ List(Camera) Scene::Cameras() const
 
 shared_ptr<Object> Scene::AddGeometry(shared_ptr<Object> geometry)
 {
+	geometry->Initialize();
 	m_Geometries.push_back(geometry);
+
 	return geometry;
 }
 

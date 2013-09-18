@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "AABB.h"
+#include "Volume.h"
 
 Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, 
 		   const unsigned* vertex_index_buffer, bool is_double_sided)
@@ -55,7 +56,11 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 		}
 		index += vertices_per_polygon[i];
 	}
+}
 
+shared_ptr<IIntersectTarget> Mesh::ConstructBoundingVolume() const
+{
+#ifdef AABB_AS_BOUNDING_VOLUME
 	float max = numeric_limits<float>::max();
 	float min = -numeric_limits<float>::max();
 
@@ -80,7 +85,42 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 	}
 
 	if (min_ext.X() != max && max_ext.X() != min)
-		m_BoundingVolume.reset(new AABB(min_ext, max_ext));
+		return shared_ptr<IIntersectTarget>(new AABB(min_ext, max_ext));
+	else
+		return nullptr;
+#else
+	unsigned num_slabs = Volume::NumSlabs();
+	const Vector3* normals = Volume::PlaneSetNormals();
+	Range<float>* extents = new Range<float>[num_slabs];
+
+	for (unsigned i = 0; i < num_slabs; ++i)
+	{
+		float max = -numeric_limits<float>::max();
+		float min = -max;
+
+		for (auto iter = m_Vertices.begin(); iter != m_Vertices.end(); ++iter)
+		{
+			float d = normals[i].DotProduct(*iter);
+
+			if (d > max)
+				max = d;
+			if (d < min)
+				min = d;
+		}
+
+		if (max != -numeric_limits<float>::max())
+		{
+			extents[i].Max = max;
+			extents[i].Min = min;
+		}
+	}
+
+	shared_ptr<IIntersectTarget> bounding_volume(new Volume(extents));
+
+	delete[] extents;
+
+	return bounding_volume;
+#endif
 }
 
 void Mesh::OnEnableDoubleSided(bool is_double_sided)
@@ -89,7 +129,7 @@ void Mesh::OnEnableDoubleSided(bool is_double_sided)
 		iter->EnableDoubleSided(is_double_sided);
 }
 
-bool Mesh::OnIntersect(const Ray& ray, Intersection& intersection) const
+bool Mesh::OnIntersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	float closest_distance = ray.EffectRange().Max;
 

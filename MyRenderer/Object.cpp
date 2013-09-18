@@ -2,15 +2,26 @@
 
 
 Object::Object(void) :
+	m_IsInitialized(false),
 	m_IsDoubleSided(false),
 	m_BoundingVolume(nullptr)
 {
 }
 
-bool Object::Intersect(const Ray& ray, Intersection& intersection) const
+void Object::Initialize()
 {
-	if (m_BoundingVolume->Intersect(ray, intersection))
-		return OnIntersect(ray, intersection);
+	if (!m_IsInitialized)
+	{
+		m_BoundingVolume = ConstructBoundingVolume();
+
+		m_IsInitialized = true;
+	}
+}
+
+bool Object::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
+{
+	if (m_BoundingVolume->Intersect(ray, intersection, additional_data))
+		return OnIntersect(ray, intersection, additional_data);
 	else
 		return false;
 }

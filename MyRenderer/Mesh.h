@@ -15,9 +15,11 @@ public:
 	~Mesh(void);
 
 protected:
+	shared_ptr<IIntersectTarget> ConstructBoundingVolume() const;
+
 	void OnEnableDoubleSided(bool is_double_sided);
 
-	bool OnIntersect(const Ray& ray, Intersection& intersection) const;
+	bool OnIntersect(const Ray& ray, Intersection& intersection, void* additional_data) const;
 
 private:
 	vector<Triangle> m_Triangles;

@@ -13,7 +13,7 @@ public:
 
 	Vector3 Orientation() const;
 
-	virtual bool Intersect(const Ray& ray, Intersection& intersection) const;
+	virtual bool Intersect(const Ray& ray, Intersection& intersection, void* additional_data = nullptr) const;
 
 	virtual ~Plane(void);
 

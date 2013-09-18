@@ -14,7 +14,7 @@ class Intersection;
 class IIntersectTarget
 {
 public:
-	virtual bool Intersect(const Ray& ray, Intersection& intersection) const = 0;
+	virtual bool Intersect(const Ray& ray, Intersection& intersection, void* additional_data = nullptr) const = 0;
 
 	virtual ~IIntersectTarget() = 0 {}
 };

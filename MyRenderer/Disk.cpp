@@ -8,10 +8,10 @@ Disk::Disk(float radius, const Vector3& center, const Vector3& orientation, cons
 {
 }
 
-bool Disk::Intersect(const Ray& ray, Intersection& intersection) const
+bool Disk::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	Range<float> orig_range = ray.EffectRange();
-	bool flag = Plane::Intersect(ray, intersection);
+	bool flag = Plane::Intersect(ray, intersection, additional_data);
 
 	if (flag)
 	{

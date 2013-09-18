@@ -16,6 +16,6 @@ public:
 	static atomic_ullong numPrimaryRaysPerFrame;
 	static atomic_ullong numRayTriangleTestsPerFrame;
 	static atomic_ullong numIntersectionPerFrame;
-	static atomic_ullong numRayAABBTestsPerFrame;
-	static atomic_ullong numAABBs;
+	static atomic_ullong numRayVolumeTestsPerFrame;
+	static atomic_ullong numBoundingVolumes;
 };

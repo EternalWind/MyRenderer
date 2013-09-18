@@ -9,7 +9,7 @@ Plane::Plane(const Vector3& center, const Vector3& orientation, const ColorRGBA&
 	m_Orientation.Normalise();
 }
 
-bool Plane::Intersect(const Ray& ray, Intersection& intersection) const
+bool Plane::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	float dir_norm = ray.Direction().DotProduct(m_Orientation);
 

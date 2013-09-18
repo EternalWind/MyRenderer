@@ -14,7 +14,7 @@ public:
 
 	Vector3 MaxExtent() const;
 
-	bool Intersect(const Ray& ray, Intersection& intersection) const;
+	bool Intersect(const Ray& ray, Intersection& intersection, void* additional_data = nullptr) const;
 
 	~AABB(void);
 

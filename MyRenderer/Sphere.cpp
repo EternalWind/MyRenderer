@@ -11,7 +11,7 @@ Sphere::Sphere(const Vector3& center, float radius, const ColorRGBA& color) :
 {
 }
 
-bool Sphere::Intersect(const Ray& ray, Intersection& intersection) const
+bool Sphere::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	Range<float> t;
 
