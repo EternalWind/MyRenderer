@@ -2,7 +2,8 @@
 
 
 Scene::Scene(const ColorRGBA& background_color) :
-	m_BackgroundColor(background_color)
+	m_BackgroundColor(background_color),
+	m_IsInitialized(false)
 {
 }
 
@@ -38,6 +39,15 @@ ColorRGBA Scene::BackgroundColor() const
 void Scene::SetBackgroundColor(const ColorRGBA& background_color)
 {
 	m_BackgroundColor = background_color;
+}
+
+void Scene::Initialize()
+{
+	if (!m_IsInitialized)
+	{
+		OnInitialize();
+		m_IsInitialized = true;
+	}
 }
 
 Scene::~Scene(void)

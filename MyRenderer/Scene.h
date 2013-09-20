@@ -1,19 +1,11 @@
 #pragma once
 
-#include <memory>
-#include <vector>
+#include "IScene.h"
 
-#include "Camera.h"
-#include "Object.h"
-
-using namespace std;
-
-#define List(T) vector<shared_ptr<T>>
-
-class Scene
+class Scene : public IScene
 {
 public:
-	Scene(const ColorRGBA& background_color = ColorRGBA());
+	Scene(const ColorRGBA& background_color);
 
 	shared_ptr<Camera> AddCamera(shared_ptr<Camera> camera);
 
@@ -27,11 +19,16 @@ public:
 
 	void SetBackgroundColor(const ColorRGBA& background_color);
 
-    ~Scene(void);
+	void Initialize();
 
-private:
+    virtual ~Scene(void);
+
+protected:
+	virtual void OnInitialize() = 0;
+
 	List(Camera) m_Cameras;
 	List(Object) m_Geometries;
 	ColorRGBA m_BackgroundColor;
+	bool m_IsInitialized;
 };
 

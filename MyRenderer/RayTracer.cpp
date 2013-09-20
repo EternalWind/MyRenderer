@@ -22,8 +22,6 @@ void RayTracer::Render() const
 	{
 		auto scene = *iter_s;
 		auto cameras = scene->Cameras();
-		auto geometries = scene->Geometries();
-		ColorRGBA background_color = scene->BackgroundColor();
 
 		for (auto iter_c = cameras.begin(); iter_c != cameras.end(); ++iter_c)
 		{
@@ -66,7 +64,7 @@ void RayTracer::Render() const
 					Ray ray(cam_pos, ray_direction, Range<float>(near, far));
 					++Profiler::numPrimaryRaysPerFrame;
 
-					render_target->SetPixel(i, j, Trace(ray, geometries, background_color));
+					render_target->SetPixel(i, j, Trace(ray, scene));
 				}
 		}
 	}
@@ -76,44 +74,27 @@ void RayTracer::Render() const
 	Profiler::renderTimePerFrame = float(end - start) / CLOCKS_PER_SEC;
 }
 
-ColorRGBA RayTracer::Trace(const Ray& ray, const List(Object)& geometries, const ColorRGBA& background_color) const
+ColorRGBA RayTracer::Trace(const Ray& ray, shared_ptr<IScene> scene) const
 {
-	Intersection closest_hit;
-	float cloest_distance = ray.EffectRange().Max;
-	Volume::PrecomputedValues values(ray);
+	Intersection intersection;
 
-	for (auto iter_g = geometries.begin(); iter_g != geometries.end(); ++iter_g)
+	if (scene->Intersect(ray, intersection) && intersection.Distance() < ray.EffectRange().Max)
 	{
-		auto geometry = *iter_g;
-		Intersection hit;
-
-		if (geometry->Intersect(ray, hit, &values) && hit.Distance() < cloest_distance)
+		if (m_IsWireFrame)
 		{
-			closest_hit = hit;
-			cloest_distance = hit.Distance();
-		}
-	}
-
-	if (m_IsWireFrame)
-	{
-		if (cloest_distance < ray.EffectRange().Max)
-		{
-			ParycentricCoord uvw = closest_hit.ParycentricCoordinate();
+			ParycentricCoord uvw = intersection.ParycentricCoordinate();
 			float epsilon = 0.01f;
 
 			if (uvw.u < epsilon || uvw.v < epsilon || uvw.w < epsilon)
 				return ColorRGBA(1.f, 1.f, 1.f);
 		}
-
-		return background_color;
-	}
-	else
-	{
-		if (cloest_distance < ray.EffectRange().Max)
-			return Shade(ray, closest_hit);
 		else
-			return background_color;
+		{
+			return Shade(ray, intersection);
+		}
 	}
+
+	return scene->BackgroundColor();
 }
 
 ColorRGBA RayTracer::Shade(const Ray& ray, const Intersection& intersection) const

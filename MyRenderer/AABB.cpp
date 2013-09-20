@@ -2,7 +2,6 @@
 #include "Profiler.h"
 
 AABB::AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA& color) :
-	Primitive(color),
 	m_MinExtent(min_extent),
 	m_MaxExtent(max_extent)
 {
@@ -10,7 +9,6 @@ AABB::AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA
 }
 
 AABB::AABB(const AABB& other) :
-	Primitive(other.m_Color),
 	m_MinExtent(other.m_MinExtent),
 	m_MaxExtent(other.m_MaxExtent)
 {
@@ -93,4 +91,26 @@ bool AABB::Intersect(const Ray& ray, Intersection& intersection, void* additiona
 	intersection.SetTestObject(&ray);
 
 	return true;
+}
+
+void AABB::ExtendBy(const IBoundingVolume* other)
+{
+	const AABB* box = dynamic_cast<const AABB*>(other);
+
+	if (box != nullptr)
+	{
+		if (m_MinExtent.X() > box->m_MinExtent.X())
+			m_MinExtent.SetX(box->m_MinExtent.X());
+		if (m_MinExtent.Y() > box->m_MinExtent.Y())
+			m_MinExtent.SetY(box->m_MinExtent.Y());
+		if (m_MinExtent.Z() > box->m_MinExtent.Z())
+			m_MinExtent.SetZ(box->m_MinExtent.Z());
+
+		if (m_MaxExtent.X() < box->m_MaxExtent.X())
+			m_MaxExtent.SetX(box->m_MaxExtent.X());
+		if (m_MaxExtent.Y() < box->m_MaxExtent.Y())
+			m_MaxExtent.SetY(box->m_MaxExtent.Y());
+		if (m_MaxExtent.Z() < box->m_MaxExtent.Z())
+			m_MaxExtent.SetZ(box->m_MaxExtent.Z());
+	}
 }

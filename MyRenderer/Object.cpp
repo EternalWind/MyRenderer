@@ -40,6 +40,11 @@ void Object::EnableDoubleSided(bool is_double_sided)
 	}
 }
 
+shared_ptr<IBoundingVolume> Object::BoundingVolume() const
+{
+	return m_BoundingVolume;
+}
+
 Object::~Object(void)
 {
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "IIntersectTarget.h"
+#include "IBoundingVolume.h"
 
 class Object :
 	public IIntersectTarget
@@ -16,10 +16,12 @@ public:
 
 	void EnableDoubleSided(bool is_double_sided);
 
+	shared_ptr<IBoundingVolume> BoundingVolume() const;
+
 	virtual ~Object(void);
 
 protected:
-	virtual shared_ptr<IIntersectTarget> ConstructBoundingVolume() const = 0;
+	virtual shared_ptr<IBoundingVolume> ConstructBoundingVolume() const = 0;
 
 	virtual void OnEnableDoubleSided(bool is_double_sided) = 0;
 
@@ -28,6 +30,6 @@ protected:
 private:
 	bool m_IsInitialized;
 	bool m_IsDoubleSided;
-	shared_ptr<IIntersectTarget> m_BoundingVolume;
+	shared_ptr<IBoundingVolume> m_BoundingVolume;
 };
 

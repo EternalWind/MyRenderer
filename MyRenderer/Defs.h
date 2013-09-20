@@ -1,5 +1,11 @@
 #pragma once
 
+#include <memory>
+#include <vector>
+#include <assert.h>
+
+#define List(T) vector<shared_ptr<T>>
+
 #define MAKE_STATIC(class_name) \
 	private: \
 	class_name () {} \

@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Primitive.h"
+#include "IBoundingVolume.h"
 
 using namespace std;
 
 class Volume :
-	public Primitive
+	public IBoundingVolume
 {
 private:
 	static const unsigned m_NumSlabs_s = 7;
@@ -22,11 +22,17 @@ public:
 		float denominators[m_NumSlabs_s];
 	};
 
-	Volume(Range<float> extents[m_NumSlabs_s], const ColorRGBA& color = ColorRGBA());
+	Volume(Range<float> extents[m_NumSlabs_s] = nullptr, const ColorRGBA& color = ColorRGBA());
 
 	Volume(const Volume& other);
 
 	bool Intersect(const Ray& ray, Intersection& intersection, void* additional_data = nullptr) const;
+
+	void ExtendBy(const IBoundingVolume* other);
+
+	Vector3 MinExtent() const;
+
+	Vector3 MaxExtent() const;
 
 	static unsigned NumSlabs();
 

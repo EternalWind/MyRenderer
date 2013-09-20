@@ -33,9 +33,9 @@ public:
 
 	Vector<size> operator / (float value) const;
 
-	Vector<size> operator == (const Vector<size>& other) const;
+	bool operator == (const Vector<size>& other) const;
 
-	Vector<size> operator != (const Vector<size>& other) const;
+	bool operator != (const Vector<size>& other) const;
 
 	float Normalise();
 
@@ -133,7 +133,7 @@ Vector<size> inline Vector<size>::operator / (float value) const
 }
 
 template <size_t size>
-Vector<size> inline Vector<size>::operator == (const Vector<size>& other) const
+bool inline Vector<size>::operator == (const Vector<size>& other) const
 {
 	for (unsigned i = 0; i < size; ++i)
 	{
@@ -147,7 +147,7 @@ Vector<size> inline Vector<size>::operator == (const Vector<size>& other) const
 }
 
 template <size_t size>
-Vector<size> inline Vector<size>::operator != (const Vector<size>& other) const
+bool inline Vector<size>::operator != (const Vector<size>& other) const
 {
 	return !(*this == other);
 }

@@ -15,7 +15,7 @@ public:
 	~Mesh(void);
 
 protected:
-	shared_ptr<IIntersectTarget> ConstructBoundingVolume() const;
+	shared_ptr<IBoundingVolume> ConstructBoundingVolume() const;
 
 	void OnEnableDoubleSided(bool is_double_sided);
 

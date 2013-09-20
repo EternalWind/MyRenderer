@@ -19,11 +19,14 @@
 #include "Sphere.h"
 #include "Disk.h"
 #include "RayTracer.h"
-#include "Scene.h"
+#include "OctreeScene.h"
+#include "SimpleScene.h"
 #include "Triangle.h"
 #include "PolygonGenerator.h"
 #include "BezierCurve.h"
 #include "Profiler.h"
+
+#define OCTREE_SCENE
 
 using namespace std;
 
@@ -31,7 +34,13 @@ int main(int argc, char** argv)
 {
 	shared_ptr<Renderer> renderer(new RayTracer());
 	shared_ptr<Image> image(new Image(640, 480));
-	shared_ptr<Scene> scene = renderer->AddScene(shared_ptr<Scene>(new Scene(ColorRGBA(0.f, 0.f, 0.f))));
+
+#ifdef OCTREE_SCENE
+	shared_ptr<IScene> scene = renderer->AddScene(shared_ptr<IScene>(new OctreeScene(ColorRGBA(0.f, 0.f, 0.f))));
+#else
+	shared_ptr<IScene> scene = renderer->AddScene(shared_ptr<IScene>(new SimpleScene(ColorRGBA(0.f, 0.f, 0.f))));
+#endif
+
 	shared_ptr<Camera> cam = scene->AddCamera(shared_ptr<Camera>(new Camera(image, Vector3(0.f, 0.f, 5.f))));
 	cam->SetNearClippingPlane(.1f);
 	cam->SetFarClippingPlane(100.f);
@@ -66,9 +75,15 @@ int main(int argc, char** argv)
 
 	//scene->AddGeometry(shared_ptr<Mesh>(new Mesh(1, vp, v)));
 
+	scene->Initialize();
+
 	renderer->Render();
 
-	image->SaveAsPPM("Sphere3.ppm");
+#ifdef OCTREE_SCENE
+	image->SaveAsPPM("OctreeScene.ppm");
+#else
+	image->SaveAsPPM("SimpleScene.ppm");
+#endif
 
 	cout << "Profile: " << endl;
 

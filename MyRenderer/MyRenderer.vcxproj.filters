@@ -147,6 +147,21 @@
     <ClInclude Include="Volume.h">
       <Filter>Header Files\Geometry</Filter>
     </ClInclude>
+    <ClInclude Include="Octree.h">
+      <Filter>Header Files\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="IBoundingVolume.h">
+      <Filter>Header Files\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="IScene.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="OctreeScene.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="SimpleScene.h">
+      <Filter>Header Files\Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector3.cpp">
@@ -226,6 +241,15 @@
     </ClCompile>
     <ClCompile Include="Volume.cpp">
       <Filter>Source Files\Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Octree.cpp">
+      <Filter>Source Files\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="OctreeScene.cpp">
+      <Filter>Source Files\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="SimpleScene.cpp">
+      <Filter>Source Files\Rendering</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

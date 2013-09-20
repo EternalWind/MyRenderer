@@ -58,7 +58,7 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 	}
 }
 
-shared_ptr<IIntersectTarget> Mesh::ConstructBoundingVolume() const
+shared_ptr<IBoundingVolume> Mesh::ConstructBoundingVolume() const
 {
 #ifdef AABB_AS_BOUNDING_VOLUME
 	float max = numeric_limits<float>::max();
@@ -85,7 +85,7 @@ shared_ptr<IIntersectTarget> Mesh::ConstructBoundingVolume() const
 	}
 
 	if (min_ext.X() != max && max_ext.X() != min)
-		return shared_ptr<IIntersectTarget>(new AABB(min_ext, max_ext));
+		return shared_ptr<IBoundingVolume>(new AABB(min_ext, max_ext));
 	else
 		return nullptr;
 #else
@@ -115,7 +115,7 @@ shared_ptr<IIntersectTarget> Mesh::ConstructBoundingVolume() const
 		}
 	}
 
-	shared_ptr<IIntersectTarget> bounding_volume(new Volume(extents));
+	shared_ptr<IBoundingVolume> bounding_volume(new Volume(extents));
 
 	delete[] extents;
 

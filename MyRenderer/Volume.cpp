@@ -2,13 +2,13 @@
 #include "Profiler.h"
 
 const Vector3 Volume::m_PlaneSetNormals_s[Volume::m_NumSlabs_s] = { 
-		Vector3(1.f, 0.f, 0.f), 
-		Vector3(0.f, 1.f, 0.f), 
-		Vector3(0.f, 0.f, 1.f),
-		Vector3(sqrtf(3) / 3.f, sqrtf(3) / 3.f, sqrtf(3) / 3.f),
-		Vector3(-sqrtf(3) / 3.f, sqrtf(3) / 3.f, sqrtf(3) / 3.f),
-		Vector3(-sqrtf(3) / 3.f, -sqrtf(3) / 3.f, sqrtf(3) / 3.f),
-		Vector3(sqrtf(3) / 3.f, -sqrtf(3) / 3.f, sqrtf(3) / 3.f) };
+	Vector3(1.f, 0.f, 0.f), 
+	Vector3(0.f, 1.f, 0.f), 
+	Vector3(0.f, 0.f, 1.f),
+	Vector3(sqrtf(3) / 3.f, sqrtf(3) / 3.f, sqrtf(3) / 3.f),
+	Vector3(-sqrtf(3) / 3.f, sqrtf(3) / 3.f, sqrtf(3) / 3.f),
+	Vector3(-sqrtf(3) / 3.f, -sqrtf(3) / 3.f, sqrtf(3) / 3.f),
+	Vector3(sqrtf(3) / 3.f, -sqrtf(3) / 3.f, sqrtf(3) / 3.f) };
 
 Volume::PrecomputedValues::PrecomputedValues(const Ray& ray)
 {
@@ -19,8 +19,7 @@ Volume::PrecomputedValues::PrecomputedValues(const Ray& ray)
 	}
 }
 
-Volume::Volume(Range<float> extents[m_NumSlabs_s], const ColorRGBA& color) :
-	Primitive(color)
+Volume::Volume(Range<float> extents[m_NumSlabs_s], const ColorRGBA& color)
 {
 	++Profiler::numBoundingVolumes;
 
@@ -28,10 +27,15 @@ Volume::Volume(Range<float> extents[m_NumSlabs_s], const ColorRGBA& color) :
 
 	if (extents != nullptr)
 		memcpy_s(m_Extents, size, extents, size);
+	else
+		for (unsigned i = 0; i < m_NumSlabs_s; ++i)
+		{
+			m_Extents[i].Max = -numeric_limits<float>::max();
+			m_Extents[i].Min = numeric_limits<float>::max();
+		}
 }
 
-Volume::Volume(const Volume& other) :
-	Primitive(other.m_Color)
+Volume::Volume(const Volume& other)
 {
 	++Profiler::numBoundingVolumes;
 
@@ -77,6 +81,32 @@ bool Volume::Intersect(const Ray& ray, Intersection& intersection, void* additio
 	intersection.SetTestObject(&ray);
 
 	return true;
+}
+
+void Volume::ExtendBy(const IBoundingVolume* other)
+{
+	const Volume* vol = dynamic_cast<const Volume*>(other);
+
+	if (vol != nullptr)
+	{
+		for (unsigned i = 0; i < m_NumSlabs_s; ++i)
+		{
+			if (vol->m_Extents[i].Max > m_Extents[i].Max)
+				m_Extents[i].Max = vol->m_Extents[i].Max;
+			if (vol->m_Extents[i].Min < m_Extents[i].Min)
+				m_Extents[i].Min = vol->m_Extents[i].Min;
+		}
+	}
+}
+
+Vector3 Volume::MinExtent() const
+{
+	return Vector3(m_Extents[0].Min, m_Extents[1].Min, m_Extents[2].Min);
+}
+
+Vector3 Volume::MaxExtent() const
+{
+	return Vector3(m_Extents[0].Max, m_Extents[1].Max, m_Extents[2].Max);
 }
 
 unsigned Volume::NumSlabs()
