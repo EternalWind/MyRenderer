@@ -83,7 +83,9 @@ bool AABB::Intersect(const Ray& ray, Intersection& intersection, void* additiona
 	if (Math::Contain(t.Min, range))
 		intersection.SetDistance(t.Min);
 	else if (Math::Contain(t.Max, range))
-		intersection.SetDistance(t.Max);
+		intersection.SetDistance(0.f);
+	else if (range.Min > t.Min && range.Max < t.Max)
+		intersection.SetDistance(0.f);
 	else
 		return false;
 

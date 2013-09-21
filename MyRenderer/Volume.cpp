@@ -73,7 +73,9 @@ bool Volume::Intersect(const Ray& ray, Intersection& intersection, void* additio
 	if (Math::Contain(t_near, ray.EffectRange()))
 		intersection.SetDistance(t_near);
 	else if (Math::Contain(t_far, ray.EffectRange()))
-		intersection.SetDistance(t_far);
+		intersection.SetDistance(0.f);
+	else if (ray.EffectRange().Max < t_far && ray.EffectRange().Min > t_near)
+		intersection.SetDistance(0.f);
 	else
 		return false;
 
