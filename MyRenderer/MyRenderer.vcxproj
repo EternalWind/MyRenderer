@@ -82,7 +82,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_USE_MATH_DEFINES;MOLLER_TRUMBORE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_USE_MATH_DEFINES;MOLLER_TRUMBORE;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -132,6 +132,8 @@
     <ClInclude Include="Defs.h" />
     <ClInclude Include="Disk.h" />
     <ClInclude Include="Exception.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="GridScene.h" />
     <ClInclude Include="IBoundingVolume.h" />
     <ClInclude Include="ICurve.h" />
     <ClInclude Include="IScene.h" />
@@ -169,6 +171,8 @@
     <ClCompile Include="ColorXYZ.cpp" />
     <ClCompile Include="Disk.cpp" />
     <ClCompile Include="Exception.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="GridScene.cpp" />
     <ClCompile Include="SimpleScene.cpp" />
     <ClCompile Include="Mesh.cpp" />
     <ClCompile Include="Object.cpp" />

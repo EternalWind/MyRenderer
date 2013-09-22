@@ -52,7 +52,7 @@ Mesh::Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const V
 				v3_i = m_Vertices.data() + index + j + 1;
 			}
 
-			m_Triangles.push_back(Triangle(v1_i, v2_i, v3_i, ColorRGBA(1.f, 1.f, 1.f), is_double_sided));
+			m_Triangles.push_back(shared_ptr<Triangle>(new Triangle(v1_i, v2_i, v3_i, ColorRGBA(1.f, 1.f, 1.f), is_double_sided)));
 		}
 		index += vertices_per_polygon[i];
 	}
@@ -126,18 +126,18 @@ shared_ptr<IBoundingVolume> Mesh::ConstructBoundingVolume() const
 void Mesh::OnEnableDoubleSided(bool is_double_sided)
 {
 	for (auto iter = m_Triangles.begin(); iter != m_Triangles.end(); ++iter)
-		iter->EnableDoubleSided(is_double_sided);
+		(*iter)->EnableDoubleSided(is_double_sided);
 }
 
 bool Mesh::OnIntersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	float closest_distance = ray.EffectRange().Max;
 
-	for (auto begin = m_Triangles.begin(); begin != m_Triangles.end(); ++begin)
+	for (auto iter = m_Triangles.begin(); iter != m_Triangles.end(); ++iter)
 	{
 		Intersection hit;
 
-		if (begin->Intersect(ray, hit) && hit.Distance() < closest_distance)
+		if ((*iter)->Intersect(ray, hit) && hit.Distance() < closest_distance)
 		{
 			closest_distance = hit.Distance();
 			intersection = hit;
@@ -148,6 +148,16 @@ bool Mesh::OnIntersect(const Ray& ray, Intersection& intersection, void* additio
 		return true;
 	else
 		return false;
+}
+
+List(Triangle) Mesh::Triangles() const
+{
+	return m_Triangles;
+}
+
+unsigned Mesh::NumTriangles() const
+{
+	return (unsigned)m_Triangles.size();
 }
 
 Mesh::~Mesh(void)

@@ -21,12 +21,17 @@
 #include "RayTracer.h"
 #include "OctreeScene.h"
 #include "SimpleScene.h"
+#include "GridScene.h"
 #include "Triangle.h"
 #include "PolygonGenerator.h"
 #include "BezierCurve.h"
 #include "Profiler.h"
 
-#define OCTREE_SCENE
+#define SIMPLE_SCENE 0
+#define OCTREE_SCENE 1
+#define GRID_SCENE 2
+
+#define SCENE GRID_SCENE
 
 using namespace std;
 
@@ -35,10 +40,12 @@ int main(int argc, char** argv)
 	shared_ptr<Renderer> renderer(new RayTracer());
 	shared_ptr<Image> image(new Image(640, 480));
 
-#ifdef OCTREE_SCENE
+#if SCENE == OCTREE_SCENE
 	shared_ptr<IScene> scene = renderer->AddScene(shared_ptr<IScene>(new OctreeScene(ColorRGBA(0.f, 0.f, 0.f))));
-#else
+#elif SCENE == SIMPLE_SCENE
 	shared_ptr<IScene> scene = renderer->AddScene(shared_ptr<IScene>(new SimpleScene(ColorRGBA(0.f, 0.f, 0.f))));
+#elif SCENE == GRID_SCENE
+	shared_ptr<IScene> scene = renderer->AddScene(shared_ptr<IScene>(new GridScene(ColorRGBA(0.f, 0.f, 0.f))));
 #endif
 
 	shared_ptr<Camera> cam = scene->AddCamera(shared_ptr<Camera>(new Camera(image, Vector3(0.f, 0.f, 5.f))));
@@ -79,10 +86,12 @@ int main(int argc, char** argv)
 
 	renderer->Render();
 
-#ifdef OCTREE_SCENE
+#if SCENE == OCTREE_SCENE
 	image->SaveAsPPM("OctreeScene.ppm");
-#else
+#elif SCENE == SIMPLE_SCENE
 	image->SaveAsPPM("SimpleScene.ppm");
+#elif SCENE == GRID_SCENE
+	image->SaveAsPPM("GridScene.ppm");
 #endif
 
 	cout << "Profile: " << endl;

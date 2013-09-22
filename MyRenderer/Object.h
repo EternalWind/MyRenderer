@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IBoundingVolume.h"
+#include "Triangle.h"
 
 class Object :
 	public IIntersectTarget
@@ -17,6 +18,10 @@ public:
 	void EnableDoubleSided(bool is_double_sided);
 
 	shared_ptr<IBoundingVolume> BoundingVolume() const;
+
+	virtual List(Triangle) Triangles() const = 0;
+
+	virtual unsigned NumTriangles() const = 0;
 
 	virtual ~Object(void);
 

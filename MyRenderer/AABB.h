@@ -6,6 +6,8 @@
 class AABB : public IBoundingVolume
 {
 public:
+	AABB();
+
 	AABB(const Vector3& min_extent, const Vector3& max_extent, const ColorRGBA& color = ColorRGBA(1.f, 1.f, 1.f));
 
 	AABB(const AABB& other);

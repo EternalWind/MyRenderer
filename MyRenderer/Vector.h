@@ -37,6 +37,8 @@ public:
 
 	bool operator != (const Vector<size>& other) const;
 
+	float& operator [] (unsigned index) const;
+
 	float Normalise();
 
 	float DotProduct(const Vector<size>& other) const;
@@ -52,28 +54,22 @@ protected:
 template <size_t size>
 float inline Vector<size>::ElementAt(unsigned index) const
 {
-	if (index < size)
-	{
-		return m_Elements[index];
-	}
-	else
-	{
+#ifdef DEBUG
+	if (index >= size)
 		throw Exception("The given index is out of the scope!");
-	}
+#endif
+	return m_Elements[index];
 }
 
 template <size_t size>
 
 void inline Vector<size>::SetElementAt(unsigned index, float value)
 {
-	if (index < size)
-	{
-		m_Elements[index] = value;
-	}
-	else
-	{
+#ifdef DEBUG
+	if (index >= size)
 		throw Exception("The given index is out of the scope!");
-	}
+#endif
+	m_Elements[index] = value;
 }
 
 template <size_t size>
@@ -150,6 +146,16 @@ template <size_t size>
 bool inline Vector<size>::operator != (const Vector<size>& other) const
 {
 	return !(*this == other);
+}
+
+template <size_t size>
+inline float& Vector<size>::operator [] (unsigned index) const
+{
+#ifdef DEBUG
+	if (index >= size)
+		throw Exception("The given index is out of the scope!");
+#endif
+	return const_cast<float&>(m_Elements[index]);
 }
 
 template <size_t size>

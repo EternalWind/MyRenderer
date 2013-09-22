@@ -20,6 +20,8 @@ public:
 
 	void SetEffectRange(const Range<float>& effect_range);
 
+	int Id() const;
+
 	~Ray(void);
 
 private:
@@ -27,6 +29,9 @@ private:
 	Vector3 m_Direction;
 	Vector3 m_InvDirection;
 	Range<float> m_EffectRange;
+
+	int m_Id;
+	static int m_RayCount_s;
 };
 
 inline Vector3 Ray::Origin() const
@@ -52,4 +57,9 @@ inline Range<float> Ray::EffectRange() const
 inline void Ray::SetEffectRange(const Range<float>& effect_range)
 {
 	m_EffectRange = effect_range;
+}
+
+inline int Ray::Id() const
+{
+	return m_Id;
 }

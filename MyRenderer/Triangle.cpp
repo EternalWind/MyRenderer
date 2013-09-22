@@ -2,42 +2,45 @@
 #include "Profiler.h"
 
 Triangle::Triangle() :
-	Primitive(ColorRGBA())
+	Primitive(ColorRGBA()),
+	m_LastRayId(-1)
 {
 	++Profiler::numTriangles;
 }
 
 Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, const ColorRGBA& color, bool is_double_sided) :
 	Primitive(color),
-	m_V0(v0),
-	m_V1(v1),
-	m_V2(v2),
-	m_V0V1(*m_V1 - *m_V0),
-	m_V0V2(*m_V2 - *m_V0),
-	m_IsDoubleSided(is_double_sided)
+	m_IsDoubleSided(is_double_sided),
+	m_LastRayId(-1)
 {
+	m_V[0] = v0;
+	m_V[1] = v1;
+	m_V[2] = v2;
+
+	m_V0V1 = *m_V[1] - *m_V[0];
+	m_V0V2 = *m_V[2] - *m_V[0];
+
 	Vector3 a = *v1 - *v0;
 	Vector3 b = *v2 - *v0;
 
 	m_Normal = a.CrossProduct(b);
 	m_NormalSqLength = m_Normal.SquareLength();
 
-	m_D = -(m_Normal.DotProduct(*m_V0));
+	m_D = -(m_Normal.DotProduct(*m_V[0]));
 
 	++Profiler::numTriangles;
 }
 
 Triangle::Triangle(const Triangle& other) :
 	Primitive(other.m_Color),
-	m_V0(other.m_V0),
-	m_V1(other.m_V1),
-	m_V2(other.m_V2),
+	m_V(other.m_V),
 	m_Normal(other.m_Normal),
 	m_V0V1(other.m_V0V1),
 	m_V0V2(other.m_V0V2),
 	m_D(other.m_D),
 	m_NormalSqLength(other.m_NormalSqLength),
-	m_IsDoubleSided(other.m_IsDoubleSided)
+	m_IsDoubleSided(other.m_IsDoubleSided),
+	m_LastRayId(-1)
 {
 	++Profiler::numTriangles;
 }
@@ -45,6 +48,11 @@ Triangle::Triangle(const Triangle& other) :
 bool Triangle::Intersect(const Ray& ray, Intersection& intersection, void* additional_data) const
 {
 	Profiler::numRayTriangleTestsPerFrame++;
+
+	if (m_LastRayId == ray.Id())
+		return false;
+
+	const_cast<Triangle*>(this)->m_LastRayId = ray.Id();
 
 	float t = 0.f;
 	ParycentricCoord coord;
@@ -60,7 +68,7 @@ bool Triangle::Intersect(const Ray& ray, Intersection& intersection, void* addit
 	if (!m_IsDoubleSided && det < 0.f)
 		return false;
 
-	Vector3 tvec = ray.Origin() - *m_V0;
+	Vector3 tvec = ray.Origin() - *m_V[0];
 	Vector3 qvec = tvec.CrossProduct(m_V0V1);
 
 	if (det > 0.f)

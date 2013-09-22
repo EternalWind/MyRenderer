@@ -99,6 +99,19 @@ void Volume::ExtendBy(const IBoundingVolume* other)
 				m_Extents[i].Min = vol->m_Extents[i].Min;
 		}
 	}
+	else
+	{
+		Vector3 min_extent = other->MinExtent();
+		Vector3 max_extent = other->MaxExtent();
+
+		for (unsigned i = 0; i < 3; ++i)
+		{
+			if (m_Extents[i].Min > min_extent[i])
+				m_Extents[i].Min = min_extent[i];
+			if (m_Extents[i].Max > max_extent[i])
+				m_Extents[i].Max = max_extent[i];
+		}
+	}
 }
 
 Vector3 Volume::MinExtent() const

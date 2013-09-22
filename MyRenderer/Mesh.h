@@ -3,7 +3,6 @@
 #include <vector>
 
 #include "Object.h"
-#include "Triangle.h"
 
 class Mesh :
 	public Object
@@ -11,6 +10,10 @@ class Mesh :
 public:
 	Mesh(unsigned polygon_count, const unsigned* vertices_per_polygon, const Vector3* vertex_buffer, 
 		const unsigned* vertex_index_buffer = nullptr, bool is_double_sided = false);
+
+	List(Triangle) Triangles() const;
+
+	unsigned NumTriangles() const;
 
 	~Mesh(void);
 
@@ -22,6 +25,6 @@ protected:
 	bool OnIntersect(const Ray& ray, Intersection& intersection, void* additional_data) const;
 
 private:
-	vector<Triangle> m_Triangles;
+	List(Triangle) m_Triangles;
 	vector<Vector3> m_Vertices;
 };

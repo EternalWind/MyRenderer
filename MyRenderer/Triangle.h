@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include "Primitive.h"
 
 class Triangle :
@@ -18,12 +20,12 @@ public:
 
 	void EnableDoubleSided(bool is_double_sided);
 
+	const Vector3& Vertex(unsigned i) const;
+
 	~Triangle(void);
 
 private:
-	const Vector3* m_V0;
-	const Vector3* m_V1;
-	const Vector3* m_V2;
+	array<const Vector3*, 3> m_V;
 
 	Vector3 m_Normal;
 	Vector3 m_V0V1;
@@ -33,6 +35,8 @@ private:
 	float m_NormalSqLength;
 
 	bool m_IsDoubleSided;
+
+	int m_LastRayId;
 };
 
 // Implementation for inline methods.
@@ -45,4 +49,13 @@ inline bool Triangle::IsDoubleSided() const
 inline void Triangle::EnableDoubleSided(bool is_double_sided)
 {
 	m_IsDoubleSided = is_double_sided;
+}
+
+inline const Vector3& Triangle::Vertex(unsigned i) const
+{
+#ifdef DEBUG
+	if (i > 2)
+		throw Exception("Tried to accees the 4th vertex of a triangle which appearantly only has 3!");
+#endif
+	return *m_V[i];
 }

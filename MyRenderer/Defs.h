@@ -6,6 +6,8 @@
 
 #define List(T) vector<shared_ptr<T>>
 
+#define MAX_RAY_ID 1024
+
 #define MAKE_STATIC(class_name) \
 	private: \
 	class_name () {} \
