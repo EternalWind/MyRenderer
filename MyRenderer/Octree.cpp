@@ -1,4 +1,5 @@
 #include "Octree.h"
+#include "Mesh.h"
 
 OctreeNode::OctreeNode(unsigned depth) :
 	m_IsLeaf(true),
@@ -64,8 +65,15 @@ Octree::~Octree(void)
 void Octree::Build(OctreeNode* node)
 {
 	if (node->m_IsLeaf)
-		for (auto iter = node->m_Objects.begin(); iter != node->m_Objects.end(); ++iter)
-			node->m_Extents.ExtendBy((*iter)->BoundingVolume().get());
+		for (auto iter = node->m_Triangles.begin(); iter != node->m_Triangles.end(); ++iter)
+		{
+			unsigned num_vertices[1] = { 3 };
+			Vector3 vertices[3] = { (*iter)->Vertex(0), (*iter)->Vertex(1), (*iter)->Vertex(2) };
+			Mesh triangle_mesh(1, num_vertices, vertices);
+			triangle_mesh.Initialize();
+
+			node->m_Extents.ExtendBy(triangle_mesh.BoundingVolume().get());
+		}
 	else
 		for (unsigned i = 0; i < 8; ++i)
 			if (node->m_Children[i] != nullptr)
@@ -77,6 +85,16 @@ void Octree::Build(OctreeNode* node)
 
 void Octree::Insert(shared_ptr<Object> object)
 {
+	auto triangles = object->Triangles();
+
+	for (auto iter = triangles.begin(); iter != triangles.end(); ++iter)
+	{
+		Insert(*iter);
+	}
+}
+
+void Octree::Insert(shared_ptr<Triangle> triangle)
+{
 	OctreeNode* current = m_Root;
 	Vector3 min_bound = m_MinBound;
 	Vector3 max_bound = m_MaxBound;
@@ -85,7 +103,7 @@ void Octree::Insert(shared_ptr<Object> object)
 	{
 		if (current->m_IsLeaf)
 		{
-			if (current->m_Objects.size() == 0)
+			if (current->m_Triangles.size() == 0)
 			{
 				break;
 			}
@@ -93,18 +111,18 @@ void Octree::Insert(shared_ptr<Object> object)
 			{
 				current->m_IsLeaf = false;
 
-				for (auto iter = current->m_Objects.begin(); iter != current->m_Objects.end(); ++iter)
+				for (auto iter = current->m_Triangles.begin(); iter != current->m_Triangles.end(); ++iter)
 				{
 					Insert(*iter);
 				}
 
-				current->m_Objects.clear();
+				current->m_Triangles.clear();
 			}
 		}
 		else
 		{
 			Vector3 node_center = (max_bound + min_bound) * 0.5f;
-			Vector3 object_center = (object->BoundingVolume()->MaxExtent() + object->BoundingVolume()->MinExtent()) * 0.5f;
+			Vector3 object_center = (triangle->MaxExtent() + triangle->MinExtent()) * 0.5f;
 			unsigned child_index = 0;
 
 			if (object_center.X() < node_center.X())
@@ -123,7 +141,7 @@ void Octree::Insert(shared_ptr<Object> object)
 		}
 	}
 
-	current->m_Objects.push_back(object);
+	current->m_Triangles.push_back(triangle);
 }
 
 void Octree::ComputeChildBounds(unsigned child_index, const Vector3& center, const Vector3& min_bound, const Vector3& max_bound,

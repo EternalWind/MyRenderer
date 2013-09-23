@@ -22,6 +22,10 @@ public:
 
 	const Vector3& Vertex(unsigned i) const;
 
+	const Vector3& MinExtent() const;
+
+	const Vector3& MaxExtent() const;
+
 	~Triangle(void);
 
 private:
@@ -30,6 +34,8 @@ private:
 	Vector3 m_Normal;
 	Vector3 m_V0V1;
 	Vector3 m_V0V2;
+	Vector3 m_MinExtent;
+	Vector3 m_MaxExtent;
 	
 	float m_D;
 	float m_NormalSqLength;
@@ -58,4 +64,14 @@ inline const Vector3& Triangle::Vertex(unsigned i) const
 		throw Exception("Tried to accees the 4th vertex of a triangle which appearantly only has 3!");
 #endif
 	return *m_V[i];
+}
+
+inline const Vector3& Triangle::MinExtent() const
+{
+	return m_MinExtent;
+}
+
+inline const Vector3& Triangle::MaxExtent() const
+{
+	return m_MaxExtent;
 }

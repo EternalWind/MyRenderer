@@ -20,7 +20,7 @@ public:
 
 	bool IsLeaf() const;
 
-	const vector <shared_ptr<Object> >& Objects() const;
+	const vector <shared_ptr<Triangle> >& Triangles() const;
 
 	unsigned Depth() const;
 
@@ -31,7 +31,7 @@ public:
 private:
 	array<OctreeNode*, 8> m_Children;
 	bool m_IsLeaf;
-	vector < shared_ptr<Object> > m_Objects;
+	vector < shared_ptr<Triangle> > m_Triangles;
 	unsigned m_Depth;
 	Volume m_Extents;
 
@@ -65,6 +65,8 @@ private:
 
 	void Insert(shared_ptr<Object> object);
 
+	void Insert(shared_ptr<Triangle> triangle);
+
 	void ComputeChildBounds(unsigned child_index, const Vector3& center, const Vector3& min_bound, const Vector3& max_bound,
 		Vector3& child_min_bound, Vector3& child_max_bound) const;
 
@@ -95,9 +97,9 @@ inline bool OctreeNode::IsLeaf() const
 	return m_IsLeaf;
 }
 
-inline const vector< shared_ptr<Object> >& OctreeNode::Objects() const
+inline const vector< shared_ptr<Triangle> >& OctreeNode::Triangles() const
 {
-	return m_Objects;
+	return m_Triangles;
 }
 
 inline unsigned OctreeNode::Depth() const

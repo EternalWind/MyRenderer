@@ -31,7 +31,7 @@
 #define OCTREE_SCENE 1
 #define GRID_SCENE 2
 
-#define SCENE GRID_SCENE
+#define SCENE OCTREE_SCENE
 
 using namespace std;
 

@@ -28,6 +28,24 @@ Triangle::Triangle(const Vector3* v0, const Vector3* v1, const Vector3* v2, cons
 
 	m_D = -(m_Normal.DotProduct(*m_V[0]));
 
+	float max = numeric_limits<float>::max();
+	float min = -max;
+
+	m_MinExtent = Vector3(max, max, max);
+	m_MaxExtent = Vector3(min, min, min);
+
+	for (unsigned i = 0; i < 3; ++i)
+	{
+		const Vector3& vertex = *m_V[i];
+		for (unsigned j = 0; j < 3; ++j)
+		{
+			if (m_MinExtent[j] > vertex[j])
+				m_MinExtent[j] = vertex[j];
+			if (m_MaxExtent[j] < vertex[j])
+				m_MaxExtent[j] = vertex[j];
+		}
+	}
+
 	++Profiler::numTriangles;
 }
 
@@ -37,6 +55,8 @@ Triangle::Triangle(const Triangle& other) :
 	m_Normal(other.m_Normal),
 	m_V0V1(other.m_V0V1),
 	m_V0V2(other.m_V0V2),
+	m_MinExtent(other.m_MinExtent),
+	m_MaxExtent(other.m_MaxExtent),
 	m_D(other.m_D),
 	m_NormalSqLength(other.m_NormalSqLength),
 	m_IsDoubleSided(other.m_IsDoubleSided),

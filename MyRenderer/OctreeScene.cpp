@@ -30,7 +30,7 @@ bool OctreeScene::Intersect(const Ray& ray, Intersection& intersection, void* ad
 
 		if (current->IsLeaf())
 		{
-			for (auto iter = current->Objects().begin(); iter != current->Objects().end(); ++iter)
+			for (auto iter = current->Triangles().begin(); iter != current->Triangles().end(); ++iter)
 			{
 				if ((*iter)->Intersect(ray, hit, additional_data) && hit.Distance() < min_t)
 				{
